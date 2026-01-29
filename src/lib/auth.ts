@@ -1,8 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
-import nodemailer from 'nodemailer';
-
+import nodemailer from "nodemailer";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -14,7 +13,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -23,9 +21,9 @@ export const auth = betterAuth({
     additionalFields: {
       phoneNumber: {
         type: "string",
-        required: false, 
+        required: false,
       },
-      
+
       role: { type: "string", defaultValue: "STUDENT" },
       age: { type: "number" },
     },
@@ -36,19 +34,18 @@ export const auth = betterAuth({
     autoSignIn: false,
     requireEmailVerification: true,
   },
-   emailVerification: {
-     sendOnSignUp: true,
+  emailVerification: {
+    sendOnSignUp: true,
     autoSignInAfterVerification: true,
-        sendVerificationEmail: async ({ user, url, token }, request) => {
-            try{
-              const verificationLink = `${process.env.APP_URL}/verify-email?token=${token}`;
+    sendVerificationEmail: async ({ user, url, token }, request) => {
+      try {
+        const verificationLink = `${process.env.APP_URL}/verify-email?token=${token}`;
 
-              const mailOptions = {
-        from: `"TutorLink Support" <${process.env.APP_EMAIL}>`,
-        to: user.email,
-        subject: "Verify your email address",
-        text: `Please verify your email by clicking the following link: ${verificationLink}`,
-        html: `
+        const mailOptions = {
+          from: `"TutorLink Support" <${process.env.APP_EMAIL}>`,
+          to: user.email,
+          subject: "Verify your email address",
+          html: `
           <div style="font-family: sans-serif; padding: 20px;">
             <h2>Welcome to TutorLink!</h2>
             <p>Please click the button below to verify your email address:</p>
@@ -58,14 +55,21 @@ export const auth = betterAuth({
             <p>If the button doesn't work, copy and paste this link: <br/> ${url}</p>
           </div>
         `,
-      };
+        };
         await transporter.sendMail(mailOptions);
         console.log(`Verification email sent to ${user.email}`);
-               
+      } catch (error) {
+        console.error("Error sending verification email:", error);
+      }
+    },
+  },
 
-            }catch(error){
-                console.error("Error sending verification email:", error);
-            }
-        }
-    }
+  socialProviders: {
+    google: {
+      accessType: "offline", 
+        prompt: "select_account consent", 
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
 });
