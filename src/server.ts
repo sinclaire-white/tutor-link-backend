@@ -1,20 +1,24 @@
-import express, { Application } from "express";
-import dotenv from 'dotenv';
 
-const app: Application = express();
+import { prisma } from "./lib/prisma";
+import app from "./app";
+
+
 const PORT = process.env.PORT || 3000;
 
-// Load environment variables
-dotenv.config();
+async function main(){
+    try {
+      await prisma.$connect();
 
-// middleware
-app.use(express.json());
+    console.log("Connected to database");
 
-// routes
-app.get("/", (req, res) => {
-  res.send("Hello, TutorLink!");
-});
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+    } catch (error) {
+      console.error("Error connecting to database:", error);
+      await prisma.$disconnect();
+      process.exit(1);
+    }
+}
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+main();
