@@ -1,0 +1,13 @@
+model Tutor {
+    id             String   @id @default(uuid())
+    userId         String   @unique
+    subject        String   @db.VarChar(100)
+    bio            String?  @db.Text
+    hourlyRate     Decimal  @db.Decimal(10, 2)
+    rating         Decimal? @db.Decimal(2, 1)
+    profilePicture String?  @db.VarChar(255)
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+
+    user  User @relation(fields: [userId], references: [id])
+}

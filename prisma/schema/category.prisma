@@ -1,0 +1,8 @@
+model Category {
+    id String @id @default(uuid())
+    name String @db.VarChar(255)
+    description String? @db.Text
+    createdAt DateTime @default(now())
+
+    bookings Booking[]
+}

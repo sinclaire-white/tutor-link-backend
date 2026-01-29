@@ -1,0 +1,21 @@
+model User {
+    id             String   @id @default(uuid())
+    name           String   @db.VarChar(255)
+    email          String   @unique @db.VarChar(255)
+    password       String   @db.VarChar(255)
+    age            Int?     @db.SmallInt
+    profilePicture String?  @db.VarChar(255)
+    role           UserRole @default(STUDENT)
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+
+    tutor           Tutor?
+    studentBookings Booking[] @relation("StudentBookings")
+    tutorBookings   Booking[] @relation("TutorBookings")
+}
+
+enum UserRole {
+    STUDENT
+    TUTOR
+    ADMIN
+}
