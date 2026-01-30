@@ -24,8 +24,14 @@ export const auth = betterAuth({
         required: false,
       },
 
-      role: { type: "string", defaultValue: "STUDENT" },
-      age: { type: "number" },
+      role: {
+        type: "string",
+        defaultValue: "STUDENT",
+      },
+      age: {
+        type: "number",
+        required: false,
+      },
     },
   },
   trustedOrigins: [process.env.APP_URL || "http://localhost:5000"],
@@ -66,8 +72,8 @@ export const auth = betterAuth({
 
   socialProviders: {
     google: {
-      accessType: "offline", 
-        prompt: "select_account consent", 
+      accessType: "offline",
+      prompt: "select_account consent",
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
