@@ -1,6 +1,7 @@
 import { auth } from "../lib/auth";
 import { fromNodeHeaders } from "better-auth/node";
 import { NextFunction, Request, Response } from "express";
+import sendResponse from "../helpers/sendResponse"; 
 
 export enum UserRole {
   STUDENT = "STUDENT",
@@ -8,7 +9,6 @@ export enum UserRole {
   ADMIN = "ADMIN",
 }
 
-// Extend Express Request interface to include user property
 declare global {
   namespace Express {
     interface Request {
@@ -29,28 +29,38 @@ const authMiddleware = (...roles: UserRole[]) => {
       const session = await auth.api.getSession({
         headers: fromNodeHeaders(req.headers),
       });
-      // Check if the user is authenticated
+
+      // Check Authentication
       if (!session || !session.user) {
-        return res.status(401).json({
+        return sendResponse(res, {
+          statusCode: 401,
           success: false,
-          message: "You are not authorized user",
+          message: "You are not an authorized user",
+          data: null, // Passes null because sendResponse expects 'data'
         });
       }
-      // Check if the user's email is verified
+
+      // Check Email Verification
       if (!session.user.emailVerified) {
-        return res.status(403).json({
+        return sendResponse(res, {
+          statusCode: 403,
           success: false,
           message: "Please verify your email.",
+          data: null,
         });
       }
-      // Check if the user has the required roles
+
+      // Check Roles
       if (roles.length && !roles.includes(session.user.role as UserRole)) {
-        return res.status(403).json({
+        return sendResponse(res, {
+          statusCode: 403,
           success: false,
           message: "You do not have permission to access this resource.",
+          data: null,
         });
       }
-      // attach user info to the request object
+
+      // Attach user and move to next
       req.user = {
         id: session.user.id,
         email: session.user.email,
@@ -58,11 +68,19 @@ const authMiddleware = (...roles: UserRole[]) => {
         role: session.user.role,
         emailVerified: session.user.emailVerified,
       };
+      
       next();
     } catch (err) {
-      res.status(401).json({ error: "Unauthorized" });
+      // Global Catch Error
+      sendResponse(res, {
+        statusCode: 401,
+        success: false,
+        message: "Unauthorized session or server error",
+        data: null,
+      });
       next(err);
     }
   };
 };
+
 export default authMiddleware;

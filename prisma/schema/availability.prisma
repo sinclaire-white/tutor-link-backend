@@ -1,0 +1,23 @@
+model Availability {
+    id        String @id @default(uuid())
+    tutorId   String
+    dayOfWeek Day
+    startTime String
+    endTime   String
+
+    // Relations
+    tutor Tutor @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+
+    @@unique([tutorId, dayOfWeek, startTime, endTime]) // Prevent duplicate slots
+    @@map("availability")
+}
+
+enum Day {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+}

@@ -192,6 +192,23 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumDayFilter<$PrismaModel = never> = {
+  equals?: $Enums.Day | Prisma.EnumDayFieldRefInput<$PrismaModel>
+  in?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDayFilter<$PrismaModel> | $Enums.Day
+}
+
+export type EnumDayWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Day | Prisma.EnumDayFieldRefInput<$PrismaModel>
+  in?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDayWithAggregatesFilter<$PrismaModel> | $Enums.Day
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDayFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDayFilter<$PrismaModel>
+}
+
 export type EnumBookingStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.BookingStatus | Prisma.EnumBookingStatusFieldRefInput<$PrismaModel>
   in?: $Enums.BookingStatus[] | Prisma.ListEnumBookingStatusFieldRefInput<$PrismaModel>
@@ -479,6 +496,23 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumDayFilter<$PrismaModel = never> = {
+  equals?: $Enums.Day | Prisma.EnumDayFieldRefInput<$PrismaModel>
+  in?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDayFilter<$PrismaModel> | $Enums.Day
+}
+
+export type NestedEnumDayWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Day | Prisma.EnumDayFieldRefInput<$PrismaModel>
+  in?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  notIn?: $Enums.Day[] | Prisma.ListEnumDayFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumDayWithAggregatesFilter<$PrismaModel> | $Enums.Day
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumDayFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumDayFilter<$PrismaModel>
 }
 
 export type NestedEnumBookingStatusFilter<$PrismaModel = never> = {
