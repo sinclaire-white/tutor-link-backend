@@ -8,7 +8,8 @@ model Availability {
     // Relations
     tutor Tutor @relation(fields: [tutorId], references: [id], onDelete: Cascade)
 
-    @@unique([tutorId, dayOfWeek, startTime, endTime]) // Prevent duplicate slots
+    // Prevent duplicate slots for the same tutor
+    @@unique([tutorId, dayOfWeek, startTime, endTime])
     @@map("availability")
 }
 

@@ -29,7 +29,36 @@ const getAllCategories = async (req: Request, res: Response) => {
   });
 };
 
+// Logic for updating a category
+const updateCategory = async (req: Request, res: Response) => {
+  const { id } = req.params; // Get ID from URL
+  const result = await CategoryService.updateCategory(id as string, req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category updated successfully",
+    data: result,
+  });
+};
+
+// Logic for deleting a category
+const deleteCategory = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  await CategoryService.deleteCategory(id as string);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Category deleted successfully",
+    data: null, // No data to return after deletion
+  });
+};
+
+
 export const CategoryController = {
   createCategory,
   getAllCategories,
+  updateCategory,
+  deleteCategory
 };
