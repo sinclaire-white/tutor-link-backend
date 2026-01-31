@@ -1,4 +1,4 @@
-import { prisma } from "../lib/prisma";
+import { prisma } from "../../lib/prisma";
 
 // Creates a new record in the Category table
 const createCategory = async (payload: { name: string; description?: string }) => {

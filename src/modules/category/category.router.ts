@@ -1,7 +1,7 @@
 import  { Router} from "express";
 import { CategoryController } from "./category.controller";
-import {  UserRole } from "../middlewares/auth.middleware";
-import authMiddleware from "../middlewares/auth.middleware"
+import {  UserRole } from "../../middlewares/auth.middleware";
+import authMiddleware from "../../middlewares/auth.middleware"
 
 const router: Router = Router();
 // Public: Anyone can see the categories

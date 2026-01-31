@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { CategoryService } from "./category.service";
-import sendResponse from "../helpers/sendResponse";
+import sendResponse from "../../helpers/sendResponse";
 
 
 
