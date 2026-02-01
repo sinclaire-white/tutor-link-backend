@@ -1,28 +1,25 @@
-import express, { Application } from "express";
-import { auth } from "./lib/auth";
-import { toNodeHandler } from "better-auth/node";
-import cors from "cors";
-import { CategoryRoutes } from "./modules/category/category.router";
-import { TutorRoutes } from "./modules/tutor/tutor.router";
+import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
+import globalErrorHandler from './middlewares/globalErrorHandler';
+import notFound from './middlewares/notFound';
+import router from './routes/index';
 
 const app: Application = express();
 
-app.use(cors({
-    origin: process.env.APP_URL || "http://localhost:5000",
-    credentials: true,
-}));
-
-app.all("/api/auth/*splat", toNodeHandler(auth));
-
+// Parsers
 app.use(express.json());
+app.use(cors());
 
-app.use("/api/categories", CategoryRoutes);
-app.use("/api/tutors", TutorRoutes);
+// Application Routes
+app.use('/api/v1', router);
 
-
-
-
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
+// Testing route
+app.get('/', (req: Request, res: Response) => {
+  res.send('Tutor Link Server is running!');
 });
+
+// Middlewares
+app.use(globalErrorHandler); // Must be after routes
+app.use(notFound);           
+
 export default app;

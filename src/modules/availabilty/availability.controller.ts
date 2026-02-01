@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AvailabilityService } from "./availability.service";
-import sendResponse from "../../helpers/sendResponse";
+import sendResponse from "../../utils/sendResponse";
 import { prisma } from "../../lib/prisma";
 
 const updateMyAvailability = async (req: Request, res: Response) => {

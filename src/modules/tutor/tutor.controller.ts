@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { TutorService } from "./tutor.service";
-import sendResponse from "../../helpers/sendResponse";
+import sendResponse from "../../utils/sendResponse";
 import { UserRole } from "../../middlewares/auth.middleware";
 
 const registerTutor = async (req: Request, res: Response) => {

@@ -8,6 +8,8 @@ declare global {
         id: string;
         role: UserRole;
         email: string;
+        name: string;
+        emailVerified: boolean;
       };
     }
   }

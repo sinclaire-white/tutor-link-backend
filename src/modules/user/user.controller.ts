@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
-import sendResponse from "../../helpers/sendResponse";
+import sendResponse from "../../utils/sendResponse";
 
 const getMyProfile = async (req: Request, res: Response) => {
   if (!req.user) {

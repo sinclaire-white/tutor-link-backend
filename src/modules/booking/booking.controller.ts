@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { BookingService } from "./booking.service";
-import sendResponse from "../../helpers/sendResponse";
+import sendResponse from "../../utils/sendResponse";
 
 const createBooking = async (req: Request, res: Response) => {
   try {

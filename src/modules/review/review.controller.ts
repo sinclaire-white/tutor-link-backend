@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ReviewService } from "./review.service";
-import sendResponse from "../../helpers/sendResponse";
+import sendResponse from "../../utils/sendResponse";
 
 const createReview = async (req: Request, res: Response) => {
   // Safe User Check
