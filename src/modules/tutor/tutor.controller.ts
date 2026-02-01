@@ -4,9 +4,19 @@ import sendResponse from "../../helpers/sendResponse";
 import { UserRole } from "../../middlewares/auth.middleware";
 
 const registerTutor = async (req: Request, res: Response) => {
-  // id comes from our authMiddleware, not the client body
-  const userId = req.user!.id;
+//   check if user is authenticated
+  if (!req.user) {
+    return sendResponse(res, {
+      statusCode: 401,
+      success: false,
+      message: "You must be logged in to register as a tutor.",
+      data: null,
+    });
+  }
 
+  const userId = req.user.id; // get user id from req.user
+
+//   register tutor profile
   const result = await TutorService.registerTutor(userId, req.body);
 
   sendResponse(res, {
@@ -17,10 +27,9 @@ const registerTutor = async (req: Request, res: Response) => {
   });
 };
 
-// Logic for getting the tutor list
+// Get all tutors
 const getAllTutors = async (req: Request, res: Response) => {
   const result = await TutorService.getAllTutors();
-
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -29,10 +38,10 @@ const getAllTutors = async (req: Request, res: Response) => {
   });
 };
 
-// Logic for getting a single tutor's details
+// Get a single tutor by ID
 const getSingleTutor = async (req: Request, res: Response) => {
-  const { id } = req.params as { id: string };
-  const result = await TutorService.getSingleTutor(id);
+  const { id } = req.params;
+  const result = await TutorService.getSingleTutor(id as string);
 
   if (!result) {
     return sendResponse(res, {
@@ -51,16 +60,35 @@ const getSingleTutor = async (req: Request, res: Response) => {
   });
 };
 
+// Update a tutor
 const updateTutor = async (req: Request, res: Response) => {
-  const { id } = req.params; // The Tutor ID being targeted
-  const user = req.user!; // The logged-in user (Admin or Tutor)
+  const { id } = req.params;
 
-  //  Fetch the tutor profile to see who owns it
+// check if user is authenticated
+  if (!req.user) {
+    return sendResponse(res, {
+      statusCode: 401,
+      success: false,
+      message: "Unauthorized",
+      data: null,
+    });
+  }
+
+  const user = req.user;
+
+// check if tutor profile exists and ownership
   const tutorProfile = await TutorService.getSingleTutor(id as string);
+  if (!tutorProfile) {
+    return sendResponse(res, {
+      statusCode: 404,
+      success: false,
+      message: "Tutor profile not found",
+      data: null,
+    });
+  }
 
-  // Security Check:
-  // If the user is NOT an Admin AND the logged-in ID doesn't match the profile's UserID...
-  if (user.role !== UserRole.ADMIN && user.id !== tutorProfile?.userId) {
+// check if user is admin or owner
+  if (user.role !== UserRole.ADMIN && user.id !== tutorProfile.userId) {
     return sendResponse(res, {
       statusCode: 403,
       success: false,
@@ -69,8 +97,8 @@ const updateTutor = async (req: Request, res: Response) => {
     });
   }
 
+//   proceed to update
   const result = await TutorService.updateTutor(id as string, req.body);
-
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -79,16 +107,25 @@ const updateTutor = async (req: Request, res: Response) => {
   });
 };
 
-// Logic for deleting a tutor profile
-// Logic for deleting a tutor profile
+// Delete a tutor
 const deleteTutor = async (req: Request, res: Response) => {
-  const { id } = req.params as { id: string };
-  const user = req.user!; // The logged-in user
+  const { id } = req.params;
+
+// check if user is authenticated
+  if (!req.user) {
+    return sendResponse(res, {
+      statusCode: 401,
+      success: false,
+      message: "Unauthorized",
+      data: null,
+    });
+  }
+
+  const user = req.user;
 
   try {
-    // Ownership & Existence Check
-    const tutorProfile = await TutorService.getSingleTutor(id);
-    
+//    check if tutor profile exists
+    const tutorProfile = await TutorService.getSingleTutor(id as string);
     if (!tutorProfile) {
       return sendResponse(res, {
         statusCode: 404,
@@ -98,7 +135,7 @@ const deleteTutor = async (req: Request, res: Response) => {
       });
     }
 
-    // Only Admin or the actual owner can delete
+//    check if user is admin or owner
     if (user.role !== UserRole.ADMIN && user.id !== tutorProfile.userId) {
       return sendResponse(res, {
         statusCode: 403,
@@ -108,29 +145,16 @@ const deleteTutor = async (req: Request, res: Response) => {
       });
     }
 
-    // 2. Call the service (which checks for active bookings)
-    const result = await TutorService.deleteTutor(id);
-
+    const result = await TutorService.deleteTutor(id as string);
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Tutor profile deleted and user reverted to Student role successfully",
+      message: "Tutor profile deleted successfully",
       data: result,
     });
   } catch (error: any) {
-    // Catch the specific "Active Sessions" error from Service
-    if (error.message === "CANNOT_DELETE_WITH_ACTIVE_SESSIONS") {
-      return sendResponse(res, {
-        statusCode: 400,
-        success: false,
-        message: "You cannot delete your profile while you have active or upcoming sessions.",
-        data: null,
-      });
-    }
-
-    // Handle other potential errors
     sendResponse(res, {
-      statusCode: 500,
+      statusCode: 400,
       success: false,
       message: error.message || "Something went wrong",
       data: null,

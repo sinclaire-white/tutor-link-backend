@@ -4,13 +4,13 @@ import authMiddleware, { UserRole } from "../../middlewares/auth.middleware";
 
 const router: Router = Router();
 
-// Public: Students can view a tutor's availability before booking 
+// Public: Anyone can see a tutor's schedule 
 router.get("/:tutorId", AvailabilityController.getTutorAvailability);
 
-// Private: Tutors manage their own slots 
+// Private: Only Tutors can edit their own schedule 
 router.put(
   "/my-slots",
-  authMiddleware(UserRole.TUTOR),
+  authMiddleware(UserRole.TUTOR), // Security Guard
   AvailabilityController.updateMyAvailability
 );
 

@@ -4,7 +4,15 @@ import sendResponse from "../../helpers/sendResponse";
 import { prisma } from "../../lib/prisma";
 
 const updateMyAvailability = async (req: Request, res: Response) => {
-  const userId = req.user!.id;
+  if (!req.user) {
+    return sendResponse(res, {
+      statusCode: 401,
+      success: false,
+      message: "You must be logged in to update availability.",
+      data: null,
+    });
+  }
+  const userId = req.user.id
 
   // Map the User to their Tutor profile 
   const tutorProfile = await prisma.tutor.findUnique({

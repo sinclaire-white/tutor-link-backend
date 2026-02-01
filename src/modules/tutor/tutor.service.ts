@@ -12,6 +12,11 @@ interface ITutorRegistration {
 
 // Registers a user as a tutor by creating a Tutor profile and updating their role
 const registerTutor = async (userId: string, payload: ITutorRegistration) => {
+    // check if userId is provided
+    if (!userId) {
+    throw new Error("USER_ID_IS_REQUIRED");
+  }
+
   return await prisma.$transaction(async (tx) => {
     // Update User Role to TUTOR
     await tx.user.update({
@@ -48,6 +53,10 @@ const getAllTutors = async () => {
 
 // Fetches a specific tutor and includes their basic User info (name, email)
 const getSingleTutor = async (id: string) => {
+    
+  if (!id) return null; // Guard for missing ID
+
+//   Fetch tutor with associated user details
   const result = await prisma.tutor.findUnique({
     where: { id },
     include: {
@@ -65,6 +74,8 @@ const getSingleTutor = async (id: string) => {
 };
 // Update Tutor Profile (Used by Tutor or Admin)
 const updateTutor = async (id: string, payload: any) => {
+    if (!id) throw new Error("ID_IS_REQUIRED"); // ID should always be provided by caller
+
   return await prisma.tutor.update({
     where: { id },
     data: payload,
@@ -75,6 +86,8 @@ const updateTutor = async (id: string, payload: any) => {
 // This only deletes the Tutor profile, not the User account.
 
 const deleteTutor = async (id: string) => {
+    if (!id) throw new Error("ID_IS_REQUIRED"); // ID should always be provided by caller
+    
   return await prisma.$transaction(async (tx) => {
     // Find the tutor profile first to get the associated userId
     const tutor = await tx.tutor.findUnique({ 
