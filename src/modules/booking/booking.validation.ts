@@ -1,21 +1,21 @@
-import { z } from 'zod';
-import { BookingStatus } from '../../../generated/prisma/enums'; 
+import { z } from "zod";
+import { BookingStatus } from "../../../generated/prisma/enums";
 
 const createBookingZod = z.object({
   body: z.object({
-    tutorId: z.string().uuid(), 
-    categoryId: z.string().uuid(), 
-    scheduledAt: z.string().datetime(), 
+    tutorId: z.uuid(),
+    categoryId: z.uuid(),
+    scheduledAt: z.iso.datetime(),
   }),
 });
 
 const updateBookingStatusZod = z.object({
   body: z.object({
-    status: z.nativeEnum(BookingStatus), 
+    status: z.enum(Object.values(BookingStatus) as [string, ...string[]]),
   }),
 });
 
-export const BookingValidation = { 
-  createBookingZod, 
-  updateBookingStatusZod 
+export const BookingValidation = {
+  createBookingZod,
+  updateBookingStatusZod,
 };

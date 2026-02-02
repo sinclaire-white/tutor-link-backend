@@ -6,5 +6,6 @@ export interface ITutorParams {
 export interface ITutorRegistration {
   categoryIds: string[];
   bio?: string;
+  image?: string;
   hourlyRate: number;
 }

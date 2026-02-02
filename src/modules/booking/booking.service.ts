@@ -1,19 +1,28 @@
 import { prisma } from "../../lib/prisma";
 import { BookingStatus, Day } from "../../../generated/prisma/enums";
+import AppError from "../../errors/AppError";
+import { ICreateBookingPayload } from "./booking.interface";
+
+// helper to find a booking or throw 404 error
+const findBookingOrThrow = async (id: string) => {
+  const result = await prisma.booking.findUnique({
+    where: { id },
+    include: {
+      student: { select: { name: true, email: true } },
+      tutor: { select: { name: true, email: true } },
+    },
+  });
+  if (!result) throw new AppError(404, "Booking not found");
+  return result;
+};
 
 //  creating a new booking request
-
-const createBooking = async (payload: {
-  studentId: string;
-  tutorId: string;
-  categoryId: string;
-  scheduledAt: Date;
-}) => {
+const createBooking = async (payload: ICreateBookingPayload) => {
   const { studentId, tutorId, scheduledAt } = payload;
 
   // A user should not be able to hire themselves as a tutor.
   if (studentId === tutorId) {
-    throw new Error("YOU_CANNOT_BOOK_YOURSELF");
+    throw new AppError(400, "YOU_CANNOT_BOOK_YOURSELF");
   }
 
   // get the Tutor's Profile ID to check their availability slots.
@@ -22,7 +31,7 @@ const createBooking = async (payload: {
   });
 
   if (!tutorProfile) {
-    throw new Error("TUTOR_NOT_FOUND");
+    throw new AppError(404, "TUTOR_NOT_FOUND");
   }
 
   // check if the tutor actually works on the day the student selected.
@@ -36,9 +45,9 @@ const createBooking = async (payload: {
     Day.SATURDAY,
   ];
   const dayOfBooking = dayNames[scheduledAt.getDay()];
-  // Check if it exists before querying
+  
   if (!dayOfBooking) {
-    throw new Error("INVALID_BOOKING_DATE");
+    throw new AppError(400, "INVALID_BOOKING_DATE");
   }
 
   const isAvailable = await prisma.availability.findFirst({
@@ -49,7 +58,7 @@ const createBooking = async (payload: {
   });
 
   if (!isAvailable) {
-    throw new Error("TUTOR_IS_NOT_AVAILABLE_ON_THIS_DAY");
+    throw new AppError(400, "TUTOR_IS_NOT_AVAILABLE_ON_THIS_DAY");
   }
 
   // Check if there is already a PENDING or CONFIRMED booking for this tutor at this exact time.
@@ -64,7 +73,7 @@ const createBooking = async (payload: {
   });
 
   if (existingBooking) {
-    throw new Error("THIS_TIMESLOT_IS_ALREADY_TAKEN");
+    throw new AppError(409, "THIS_TIMESLOT_IS_ALREADY_TAKEN");
   }
 
   // If all guards pass, save the booking to the database.
@@ -80,9 +89,8 @@ const createBooking = async (payload: {
 };
 
 //  fetching bookings based on who is asking
-
 const getMyBookings = async (userId: string, role: string) => {
-  // If you are a TUTOR, we filter by tutorId. If you are a STUDENT, we filter by studentId.
+  // If TUTOR, filter by tutorId. If STUDENT, filter by studentId.
   const whereCondition =
     role === "TUTOR" ? { tutorId: userId } : { studentId: userId };
 
@@ -104,11 +112,11 @@ const getMyBookings = async (userId: string, role: string) => {
 };
 
 //    updating the status (Accepting, Completing, Cancelling)
-
 const updateBookingStatus = async (
   bookingId: string,
   status: BookingStatus,
 ) => {
+  await findBookingOrThrow(bookingId); // Ensure booking exists
   return await prisma.booking.update({
     where: { id: bookingId },
     data: { status },

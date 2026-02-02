@@ -1,74 +1,68 @@
 import { Request, Response } from "express";
 import { BookingService } from "./booking.service";
 import sendResponse from "../../utils/sendResponse";
+import catchAsync from "../../utils/catchAsync";
+import AppError from "../../errors/AppError";
+import { IBookingParams } from "./booking.interface";
 
-const createBooking = async (req: Request, res: Response) => {
-  try {
-    //    Ensure user is authenticated
-    if (!req.user) {
-      return sendResponse(res, {
-        statusCode: 401,
-        success: false,
-        message: "You must be logged in",
-        data: null,
-      });
-    }
-
-    // Create booking with studentId from authenticated user
-    const result = await BookingService.createBooking({
-      ...req.body,
-      studentId: req.user.id,
-      scheduledAt: new Date(req.body.scheduledAt),
-    });
-
-    sendResponse(res, {
-      statusCode: 201,
-      success: true,
-      message: "Booking requested!",
-      data: result,
-    });
-  } catch (error: any) {
-    sendResponse(res, {
-      statusCode: 400,
-      success: false,
-      message: error.message,
-      data: null,
-    });
+/**
+ * Validates that the booking ID is present.
+ * This function acts as a 'Type Guard'.
+ */
+const validateId = (id: string | undefined): string => {
+  if (!id) {
+    throw new AppError(400, "Booking ID is required");
   }
+  return id;
 };
+
+// Wraps logic in catchAsync to forward errors to the globalErrorHandler
+const createBooking = catchAsync(async (req: Request, res: Response) => {
+  // Create booking with studentId from authenticated user
+  const result = await BookingService.createBooking({
+    ...req.body,
+    studentId: req.user.id, // user object is attached by authMiddleware
+    scheduledAt: new Date(req.body.scheduledAt),
+  });
+
+  sendResponse(res, {
+    statusCode: 201,
+    success: true,
+    message: "Booking requested successfully!",
+    data: result,
+  });
+});
 
 // getting bookings for the logged-in user (student or tutor)
-const getMyBookings = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return sendResponse(res, {
-      statusCode: 401,
-      success: false,
-      message: "Unauthorized",
-      data: null,
-    });
-  }
-
+const getMyBookings = catchAsync(async (req: Request, res: Response) => {
   const result = await BookingService.getMyBookings(req.user.id, req.user.role);
+
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Bookings fetched",
+    message: "Bookings fetched successfully",
     data: result,
   });
-};
+});
 
 // updating the status of a booking
-const updateStatus = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { status } = req.body;
+const updateStatus = catchAsync(
+  async (req: Request<IBookingParams>, res: Response) => {
+    const id = validateId(req.params.id);
+    const { status } = req.body;
 
-  const result = await BookingService.updateBookingStatus(id as string, status);
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Status updated",
-    data: result,
-  });
-};
+    const result = await BookingService.updateBookingStatus(id, status);
 
-export const BookingController = { createBooking, getMyBookings, updateStatus };
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Status updated successfully",
+      data: result,
+    });
+  },
+);
+
+export const BookingController = { 
+  createBooking, 
+  getMyBookings, 
+  updateStatus };

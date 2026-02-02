@@ -76,7 +76,7 @@ const updateTutor = catchAsync(
       throw new AppError(403, "You are not authorized to update this profile");
     }
 
-    const result = await TutorService.updateTutor(id, req.body);
+    const result = await TutorService.updateTutor(id, req.body as Partial<ITutorRegistration>);
     sendResponse(res, {
       statusCode: 200,
       success: true,
