@@ -1,8 +1,8 @@
 model Tutor {
     id             String         @id @default(uuid())
     userId         String         @unique
-    subject        String         @db.VarChar(100)
     bio            String?        @db.Text
+    categories     Category[]
     image          String?
     hourlyRate     Decimal        @db.Decimal(10, 2)
     availabilities Availability[]

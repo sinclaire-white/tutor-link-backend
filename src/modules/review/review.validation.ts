@@ -1,0 +1,11 @@
+import { z } from 'zod';
+
+const createReviewZod = z.object({
+  body: z.object({
+    bookingId: z.string().uuid(), 
+    rating: z.number().int().min(1).max(5),  
+    comment: z.string().optional(), 
+  }),
+});
+
+export const ReviewValidation = { createReviewZod };

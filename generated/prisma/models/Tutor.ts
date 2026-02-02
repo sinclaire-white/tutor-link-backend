@@ -39,7 +39,6 @@ export type TutorSumAggregateOutputType = {
 export type TutorMinAggregateOutputType = {
   id: string | null
   userId: string | null
-  subject: string | null
   bio: string | null
   image: string | null
   hourlyRate: runtime.Decimal | null
@@ -51,7 +50,6 @@ export type TutorMinAggregateOutputType = {
 export type TutorMaxAggregateOutputType = {
   id: string | null
   userId: string | null
-  subject: string | null
   bio: string | null
   image: string | null
   hourlyRate: runtime.Decimal | null
@@ -63,7 +61,6 @@ export type TutorMaxAggregateOutputType = {
 export type TutorCountAggregateOutputType = {
   id: number
   userId: number
-  subject: number
   bio: number
   image: number
   hourlyRate: number
@@ -87,7 +84,6 @@ export type TutorSumAggregateInputType = {
 export type TutorMinAggregateInputType = {
   id?: true
   userId?: true
-  subject?: true
   bio?: true
   image?: true
   hourlyRate?: true
@@ -99,7 +95,6 @@ export type TutorMinAggregateInputType = {
 export type TutorMaxAggregateInputType = {
   id?: true
   userId?: true
-  subject?: true
   bio?: true
   image?: true
   hourlyRate?: true
@@ -111,7 +106,6 @@ export type TutorMaxAggregateInputType = {
 export type TutorCountAggregateInputType = {
   id?: true
   userId?: true
-  subject?: true
   bio?: true
   image?: true
   hourlyRate?: true
@@ -210,7 +204,6 @@ export type TutorGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
 export type TutorGroupByOutputType = {
   id: string
   userId: string
-  subject: string
   bio: string | null
   image: string | null
   hourlyRate: runtime.Decimal
@@ -245,13 +238,13 @@ export type TutorWhereInput = {
   NOT?: Prisma.TutorWhereInput | Prisma.TutorWhereInput[]
   id?: Prisma.StringFilter<"Tutor"> | string
   userId?: Prisma.StringFilter<"Tutor"> | string
-  subject?: Prisma.StringFilter<"Tutor"> | string
   bio?: Prisma.StringNullableFilter<"Tutor"> | string | null
   image?: Prisma.StringNullableFilter<"Tutor"> | string | null
   hourlyRate?: Prisma.DecimalFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.DecimalNullableFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
+  categories?: Prisma.CategoryListRelationFilter
   availabilities?: Prisma.AvailabilityListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -259,13 +252,13 @@ export type TutorWhereInput = {
 export type TutorOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  subject?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  categories?: Prisma.CategoryOrderByRelationAggregateInput
   availabilities?: Prisma.AvailabilityOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -276,13 +269,13 @@ export type TutorWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.TutorWhereInput | Prisma.TutorWhereInput[]
   OR?: Prisma.TutorWhereInput[]
   NOT?: Prisma.TutorWhereInput | Prisma.TutorWhereInput[]
-  subject?: Prisma.StringFilter<"Tutor"> | string
   bio?: Prisma.StringNullableFilter<"Tutor"> | string | null
   image?: Prisma.StringNullableFilter<"Tutor"> | string | null
   hourlyRate?: Prisma.DecimalFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.DecimalNullableFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
+  categories?: Prisma.CategoryListRelationFilter
   availabilities?: Prisma.AvailabilityListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
@@ -290,7 +283,6 @@ export type TutorWhereUniqueInput = Prisma.AtLeast<{
 export type TutorOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  subject?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -310,7 +302,6 @@ export type TutorScalarWhereWithAggregatesInput = {
   NOT?: Prisma.TutorScalarWhereWithAggregatesInput | Prisma.TutorScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Tutor"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Tutor"> | string
-  subject?: Prisma.StringWithAggregatesFilter<"Tutor"> | string
   bio?: Prisma.StringNullableWithAggregatesFilter<"Tutor"> | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"Tutor"> | string | null
   hourlyRate?: Prisma.DecimalWithAggregatesFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -321,13 +312,13 @@ export type TutorScalarWhereWithAggregatesInput = {
 
 export type TutorCreateInput = {
   id?: string
-  subject: string
   bio?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutTutorsInput
   availabilities?: Prisma.AvailabilityCreateNestedManyWithoutTutorInput
   user: Prisma.UserCreateNestedOneWithoutTutorInput
 }
@@ -335,25 +326,25 @@ export type TutorCreateInput = {
 export type TutorUncheckedCreateInput = {
   id?: string
   userId: string
-  subject: string
   bio?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTutorsInput
   availabilities?: Prisma.AvailabilityUncheckedCreateNestedManyWithoutTutorInput
 }
 
 export type TutorUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutTutorsNestedInput
   availabilities?: Prisma.AvailabilityUpdateManyWithoutTutorNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTutorNestedInput
 }
@@ -361,20 +352,19 @@ export type TutorUpdateInput = {
 export type TutorUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTutorsNestedInput
   availabilities?: Prisma.AvailabilityUncheckedUpdateManyWithoutTutorNestedInput
 }
 
 export type TutorCreateManyInput = {
   id?: string
   userId: string
-  subject: string
   bio?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -385,7 +375,6 @@ export type TutorCreateManyInput = {
 
 export type TutorUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -397,7 +386,6 @@ export type TutorUpdateManyMutationInput = {
 export type TutorUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -416,10 +404,19 @@ export type TutorScalarRelationFilter = {
   isNot?: Prisma.TutorWhereInput
 }
 
+export type TutorListRelationFilter = {
+  every?: Prisma.TutorWhereInput
+  some?: Prisma.TutorWhereInput
+  none?: Prisma.TutorWhereInput
+}
+
+export type TutorOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type TutorCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  subject?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   image?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -436,7 +433,6 @@ export type TutorAvgOrderByAggregateInput = {
 export type TutorMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  subject?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   image?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -448,7 +444,6 @@ export type TutorMaxOrderByAggregateInput = {
 export type TutorMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
-  subject?: Prisma.SortOrder
   bio?: Prisma.SortOrder
   image?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
@@ -508,6 +503,44 @@ export type TutorUpdateOneRequiredWithoutAvailabilitiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TutorUpdateToOneWithWhereWithoutAvailabilitiesInput, Prisma.TutorUpdateWithoutAvailabilitiesInput>, Prisma.TutorUncheckedUpdateWithoutAvailabilitiesInput>
 }
 
+export type TutorCreateNestedManyWithoutCategoriesInput = {
+  create?: Prisma.XOR<Prisma.TutorCreateWithoutCategoriesInput, Prisma.TutorUncheckedCreateWithoutCategoriesInput> | Prisma.TutorCreateWithoutCategoriesInput[] | Prisma.TutorUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TutorCreateOrConnectWithoutCategoriesInput | Prisma.TutorCreateOrConnectWithoutCategoriesInput[]
+  connect?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+}
+
+export type TutorUncheckedCreateNestedManyWithoutCategoriesInput = {
+  create?: Prisma.XOR<Prisma.TutorCreateWithoutCategoriesInput, Prisma.TutorUncheckedCreateWithoutCategoriesInput> | Prisma.TutorCreateWithoutCategoriesInput[] | Prisma.TutorUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TutorCreateOrConnectWithoutCategoriesInput | Prisma.TutorCreateOrConnectWithoutCategoriesInput[]
+  connect?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+}
+
+export type TutorUpdateManyWithoutCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.TutorCreateWithoutCategoriesInput, Prisma.TutorUncheckedCreateWithoutCategoriesInput> | Prisma.TutorCreateWithoutCategoriesInput[] | Prisma.TutorUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TutorCreateOrConnectWithoutCategoriesInput | Prisma.TutorCreateOrConnectWithoutCategoriesInput[]
+  upsert?: Prisma.TutorUpsertWithWhereUniqueWithoutCategoriesInput | Prisma.TutorUpsertWithWhereUniqueWithoutCategoriesInput[]
+  set?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  disconnect?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  delete?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  connect?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  update?: Prisma.TutorUpdateWithWhereUniqueWithoutCategoriesInput | Prisma.TutorUpdateWithWhereUniqueWithoutCategoriesInput[]
+  updateMany?: Prisma.TutorUpdateManyWithWhereWithoutCategoriesInput | Prisma.TutorUpdateManyWithWhereWithoutCategoriesInput[]
+  deleteMany?: Prisma.TutorScalarWhereInput | Prisma.TutorScalarWhereInput[]
+}
+
+export type TutorUncheckedUpdateManyWithoutCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.TutorCreateWithoutCategoriesInput, Prisma.TutorUncheckedCreateWithoutCategoriesInput> | Prisma.TutorCreateWithoutCategoriesInput[] | Prisma.TutorUncheckedCreateWithoutCategoriesInput[]
+  connectOrCreate?: Prisma.TutorCreateOrConnectWithoutCategoriesInput | Prisma.TutorCreateOrConnectWithoutCategoriesInput[]
+  upsert?: Prisma.TutorUpsertWithWhereUniqueWithoutCategoriesInput | Prisma.TutorUpsertWithWhereUniqueWithoutCategoriesInput[]
+  set?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  disconnect?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  delete?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  connect?: Prisma.TutorWhereUniqueInput | Prisma.TutorWhereUniqueInput[]
+  update?: Prisma.TutorUpdateWithWhereUniqueWithoutCategoriesInput | Prisma.TutorUpdateWithWhereUniqueWithoutCategoriesInput[]
+  updateMany?: Prisma.TutorUpdateManyWithWhereWithoutCategoriesInput | Prisma.TutorUpdateManyWithWhereWithoutCategoriesInput[]
+  deleteMany?: Prisma.TutorScalarWhereInput | Prisma.TutorScalarWhereInput[]
+}
+
 export type DecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -526,25 +559,25 @@ export type NullableDecimalFieldUpdateOperationsInput = {
 
 export type TutorCreateWithoutUserInput = {
   id?: string
-  subject: string
   bio?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutTutorsInput
   availabilities?: Prisma.AvailabilityCreateNestedManyWithoutTutorInput
 }
 
 export type TutorUncheckedCreateWithoutUserInput = {
   id?: string
-  subject: string
   bio?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTutorsInput
   availabilities?: Prisma.AvailabilityUncheckedCreateNestedManyWithoutTutorInput
 }
 
@@ -566,50 +599,50 @@ export type TutorUpdateToOneWithWhereWithoutUserInput = {
 
 export type TutorUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutTutorsNestedInput
   availabilities?: Prisma.AvailabilityUpdateManyWithoutTutorNestedInput
 }
 
 export type TutorUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTutorsNestedInput
   availabilities?: Prisma.AvailabilityUncheckedUpdateManyWithoutTutorNestedInput
 }
 
 export type TutorCreateWithoutAvailabilitiesInput = {
   id?: string
-  subject: string
   bio?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.CategoryCreateNestedManyWithoutTutorsInput
   user: Prisma.UserCreateNestedOneWithoutTutorInput
 }
 
 export type TutorUncheckedCreateWithoutAvailabilitiesInput = {
   id?: string
   userId: string
-  subject: string
   bio?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTutorsInput
 }
 
 export type TutorCreateOrConnectWithoutAvailabilitiesInput = {
@@ -630,20 +663,114 @@ export type TutorUpdateToOneWithWhereWithoutAvailabilitiesInput = {
 
 export type TutorUpdateWithoutAvailabilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUpdateManyWithoutTutorsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutTutorNestedInput
 }
 
 export type TutorUncheckedUpdateWithoutAvailabilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  categories?: Prisma.CategoryUncheckedUpdateManyWithoutTutorsNestedInput
+}
+
+export type TutorCreateWithoutCategoriesInput = {
+  id?: string
+  bio?: string | null
+  image?: string | null
+  hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  availabilities?: Prisma.AvailabilityCreateNestedManyWithoutTutorInput
+  user: Prisma.UserCreateNestedOneWithoutTutorInput
+}
+
+export type TutorUncheckedCreateWithoutCategoriesInput = {
+  id?: string
+  userId: string
+  bio?: string | null
+  image?: string | null
+  hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
+  rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  availabilities?: Prisma.AvailabilityUncheckedCreateNestedManyWithoutTutorInput
+}
+
+export type TutorCreateOrConnectWithoutCategoriesInput = {
+  where: Prisma.TutorWhereUniqueInput
+  create: Prisma.XOR<Prisma.TutorCreateWithoutCategoriesInput, Prisma.TutorUncheckedCreateWithoutCategoriesInput>
+}
+
+export type TutorUpsertWithWhereUniqueWithoutCategoriesInput = {
+  where: Prisma.TutorWhereUniqueInput
+  update: Prisma.XOR<Prisma.TutorUpdateWithoutCategoriesInput, Prisma.TutorUncheckedUpdateWithoutCategoriesInput>
+  create: Prisma.XOR<Prisma.TutorCreateWithoutCategoriesInput, Prisma.TutorUncheckedCreateWithoutCategoriesInput>
+}
+
+export type TutorUpdateWithWhereUniqueWithoutCategoriesInput = {
+  where: Prisma.TutorWhereUniqueInput
+  data: Prisma.XOR<Prisma.TutorUpdateWithoutCategoriesInput, Prisma.TutorUncheckedUpdateWithoutCategoriesInput>
+}
+
+export type TutorUpdateManyWithWhereWithoutCategoriesInput = {
+  where: Prisma.TutorScalarWhereInput
+  data: Prisma.XOR<Prisma.TutorUpdateManyMutationInput, Prisma.TutorUncheckedUpdateManyWithoutCategoriesInput>
+}
+
+export type TutorScalarWhereInput = {
+  AND?: Prisma.TutorScalarWhereInput | Prisma.TutorScalarWhereInput[]
+  OR?: Prisma.TutorScalarWhereInput[]
+  NOT?: Prisma.TutorScalarWhereInput | Prisma.TutorScalarWhereInput[]
+  id?: Prisma.StringFilter<"Tutor"> | string
+  userId?: Prisma.StringFilter<"Tutor"> | string
+  bio?: Prisma.StringNullableFilter<"Tutor"> | string | null
+  image?: Prisma.StringNullableFilter<"Tutor"> | string | null
+  hourlyRate?: Prisma.DecimalFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rating?: Prisma.DecimalNullableFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
+}
+
+export type TutorUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  availabilities?: Prisma.AvailabilityUpdateManyWithoutTutorNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTutorNestedInput
+}
+
+export type TutorUncheckedUpdateWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  availabilities?: Prisma.AvailabilityUncheckedUpdateManyWithoutTutorNestedInput
+}
+
+export type TutorUncheckedUpdateManyWithoutCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -658,10 +785,12 @@ export type TutorUncheckedUpdateWithoutAvailabilitiesInput = {
  */
 
 export type TutorCountOutputType = {
+  categories: number
   availabilities: number
 }
 
 export type TutorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  categories?: boolean | TutorCountOutputTypeCountCategoriesArgs
   availabilities?: boolean | TutorCountOutputTypeCountAvailabilitiesArgs
 }
 
@@ -678,6 +807,13 @@ export type TutorCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
 /**
  * TutorCountOutputType without action
  */
+export type TutorCountOutputTypeCountCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CategoryWhereInput
+}
+
+/**
+ * TutorCountOutputType without action
+ */
 export type TutorCountOutputTypeCountAvailabilitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AvailabilityWhereInput
 }
@@ -686,13 +822,13 @@ export type TutorCountOutputTypeCountAvailabilitiesArgs<ExtArgs extends runtime.
 export type TutorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  subject?: boolean
   bio?: boolean
   image?: boolean
   hourlyRate?: boolean
   rating?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  categories?: boolean | Prisma.Tutor$categoriesArgs<ExtArgs>
   availabilities?: boolean | Prisma.Tutor$availabilitiesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TutorCountOutputTypeDefaultArgs<ExtArgs>
@@ -701,7 +837,6 @@ export type TutorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type TutorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  subject?: boolean
   bio?: boolean
   image?: boolean
   hourlyRate?: boolean
@@ -714,7 +849,6 @@ export type TutorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type TutorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   userId?: boolean
-  subject?: boolean
   bio?: boolean
   image?: boolean
   hourlyRate?: boolean
@@ -727,7 +861,6 @@ export type TutorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type TutorSelectScalar = {
   id?: boolean
   userId?: boolean
-  subject?: boolean
   bio?: boolean
   image?: boolean
   hourlyRate?: boolean
@@ -736,8 +869,9 @@ export type TutorSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TutorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "subject" | "bio" | "image" | "hourlyRate" | "rating" | "createdAt" | "updatedAt", ExtArgs["result"]["tutor"]>
+export type TutorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bio" | "image" | "hourlyRate" | "rating" | "createdAt" | "updatedAt", ExtArgs["result"]["tutor"]>
 export type TutorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  categories?: boolean | Prisma.Tutor$categoriesArgs<ExtArgs>
   availabilities?: boolean | Prisma.Tutor$availabilitiesArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.TutorCountOutputTypeDefaultArgs<ExtArgs>
@@ -752,13 +886,13 @@ export type TutorIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
 export type $TutorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Tutor"
   objects: {
+    categories: Prisma.$CategoryPayload<ExtArgs>[]
     availabilities: Prisma.$AvailabilityPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     userId: string
-    subject: string
     bio: string | null
     image: string | null
     hourlyRate: runtime.Decimal
@@ -1159,6 +1293,7 @@ readonly fields: TutorFieldRefs;
  */
 export interface Prisma__TutorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  categories<T extends Prisma.Tutor$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tutor$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   availabilities<T extends Prisma.Tutor$availabilitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tutor$availabilitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AvailabilityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1192,7 +1327,6 @@ export interface Prisma__TutorClient<T, Null = never, ExtArgs extends runtime.Ty
 export interface TutorFieldRefs {
   readonly id: Prisma.FieldRef<"Tutor", 'String'>
   readonly userId: Prisma.FieldRef<"Tutor", 'String'>
-  readonly subject: Prisma.FieldRef<"Tutor", 'String'>
   readonly bio: Prisma.FieldRef<"Tutor", 'String'>
   readonly image: Prisma.FieldRef<"Tutor", 'String'>
   readonly hourlyRate: Prisma.FieldRef<"Tutor", 'Decimal'>
@@ -1592,6 +1726,30 @@ export type TutorDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Tutors to delete.
    */
   limit?: number
+}
+
+/**
+ * Tutor.categories
+ */
+export type Tutor$categoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Category
+   */
+  select?: Prisma.CategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Category
+   */
+  omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  where?: Prisma.CategoryWhereInput
+  orderBy?: Prisma.CategoryOrderByWithRelationInput | Prisma.CategoryOrderByWithRelationInput[]
+  cursor?: Prisma.CategoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CategoryScalarFieldEnum | Prisma.CategoryScalarFieldEnum[]
 }
 
 /**

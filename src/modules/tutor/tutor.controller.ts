@@ -1,23 +1,31 @@
 import { Request, Response } from "express";
 import { TutorService } from "./tutor.service";
 import sendResponse from "../../utils/sendResponse";
+import catchAsync from "../../utils/catchAsync";
 import { UserRole } from "../../middlewares/auth.middleware";
+import AppError from "../../errors/AppError";
+import { ITutorParams, ITutorRegistration } from "./tutor.interface";
 
-const registerTutor = async (req: Request, res: Response) => {
-//   check if user is authenticated
-  if (!req.user) {
-    return sendResponse(res, {
-      statusCode: 401,
-      success: false,
-      message: "You must be logged in to register as a tutor.",
-      data: null,
-    });
+/**
+ * Validates that the tutor ID is present.
+ * This function acts as a 'Type Guard'.
+ * By throwing an error if ID is missing, TypeScript knows that
+ * after this function runs, 'id' is definitely a string.
+ */
+const validateId = (id: string | undefined): string => {
+  if (!id) {
+    throw new AppError(400, "Tutor ID is required");
   }
+  return id;
+};
 
-  const userId = req.user.id; // get user id from req.user
-
-//   register tutor profile
-  const result = await TutorService.registerTutor(userId, req.body);
+// Wraps logic in catchAsync to forward errors to the globalErrorHandler
+const registerTutor = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user.id; // user object is attached by authMiddleware
+  const result = await TutorService.registerTutor(
+    userId,
+    req.body as ITutorRegistration,
+  );
 
   sendResponse(res, {
     statusCode: 201,
@@ -25,10 +33,10 @@ const registerTutor = async (req: Request, res: Response) => {
     message: "Tutor profile registered successfully",
     data: result,
   });
-};
+});
 
-// Get all tutors
-const getAllTutors = async (req: Request, res: Response) => {
+// Fetches all tutors
+const getAllTutors = catchAsync(async (req: Request, res: Response) => {
   const result = await TutorService.getAllTutors();
   sendResponse(res, {
     statusCode: 200,
@@ -36,131 +44,70 @@ const getAllTutors = async (req: Request, res: Response) => {
     message: "Tutors fetched successfully",
     data: result,
   });
-};
+});
 
-// Get a single tutor by ID
-const getSingleTutor = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const result = await TutorService.getSingleTutor(id as string);
+const getSingleTutor = catchAsync(
+  async (req: Request<ITutorParams>, res: Response) => {
+    // Use helper to validate and cast ID to string
+    const id = validateId(req.params.id);
 
-  if (!result) {
-    return sendResponse(res, {
-      statusCode: 404,
-      success: false,
-      message: "Tutor not found",
-      data: null,
+    const result = await TutorService.getSingleTutor(id);
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Tutor fetched successfully",
+      data: result,
     });
-  }
+  },
+);
 
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Tutor fetched successfully",
-    data: result,
-  });
-};
+const updateTutor = catchAsync(
+  async (req: Request<ITutorParams>, res: Response) => {
+    // Use helper to validate and cast ID to string
+    const id = validateId(req.params.id);
+    const user = req.user;
 
-// Update a tutor
-const updateTutor = async (req: Request, res: Response) => {
-  const { id } = req.params;
+    // We call getSingleTutor from service to check ownership
+    const tutorProfile = await TutorService.getSingleTutor(id);
 
-// check if user is authenticated
-  if (!req.user) {
-    return sendResponse(res, {
-      statusCode: 401,
-      success: false,
-      message: "Unauthorized",
-      data: null,
-    });
-  }
-
-  const user = req.user;
-
-// check if tutor profile exists and ownership
-  const tutorProfile = await TutorService.getSingleTutor(id as string);
-  if (!tutorProfile) {
-    return sendResponse(res, {
-      statusCode: 404,
-      success: false,
-      message: "Tutor profile not found",
-      data: null,
-    });
-  }
-
-// check if user is admin or owner
-  if (user.role !== UserRole.ADMIN && user.id !== tutorProfile.userId) {
-    return sendResponse(res, {
-      statusCode: 403,
-      success: false,
-      message: "You are not authorized to update this profile",
-      data: null,
-    });
-  }
-
-//   proceed to update
-  const result = await TutorService.updateTutor(id as string, req.body);
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: "Profile updated successfully",
-    data: result,
-  });
-};
-
-// Delete a tutor
-const deleteTutor = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-// check if user is authenticated
-  if (!req.user) {
-    return sendResponse(res, {
-      statusCode: 401,
-      success: false,
-      message: "Unauthorized",
-      data: null,
-    });
-  }
-
-  const user = req.user;
-
-  try {
-//    check if tutor profile exists
-    const tutorProfile = await TutorService.getSingleTutor(id as string);
-    if (!tutorProfile) {
-      return sendResponse(res, {
-        statusCode: 404,
-        success: false,
-        message: "Tutor profile not found",
-        data: null,
-      });
-    }
-
-//    check if user is admin or owner
+    // Authorization: Only Admin or the owner can update
     if (user.role !== UserRole.ADMIN && user.id !== tutorProfile.userId) {
-      return sendResponse(res, {
-        statusCode: 403,
-        success: false,
-        message: "You are not authorized to delete this profile",
-        data: null,
-      });
+      throw new AppError(403, "You are not authorized to update this profile");
     }
 
-    const result = await TutorService.deleteTutor(id as string);
+    const result = await TutorService.updateTutor(id, req.body);
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Profile updated successfully",
+      data: result,
+    });
+  },
+);
+
+const deleteTutor = catchAsync(
+  async (req: Request<ITutorParams>, res: Response) => {
+    // Use helper to validate and cast ID to string
+    const id = validateId(req.params.id);
+    const user = req.user;
+
+    const tutorProfile = await TutorService.getSingleTutor(id);
+
+    // Authorization: Only Admin or the owner can delete
+    if (user.role !== UserRole.ADMIN && user.id !== tutorProfile.userId) {
+      throw new AppError(403, "You are not authorized to delete this profile");
+    }
+
+    const result = await TutorService.deleteTutor(id);
     sendResponse(res, {
       statusCode: 200,
       success: true,
       message: "Tutor profile deleted successfully",
       data: result,
     });
-  } catch (error: any) {
-    sendResponse(res, {
-      statusCode: 400,
-      success: false,
-      message: error.message || "Something went wrong",
-      data: null,
-    });
-  }
-};
+  },
+);
 
 export const TutorController = {
   registerTutor,
