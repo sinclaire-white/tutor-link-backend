@@ -4,5 +4,5 @@ dist
 build
 .vscode
 .DS_Store
-
+generated
 /src/generated/prisma
