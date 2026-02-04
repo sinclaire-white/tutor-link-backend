@@ -1,9 +1,10 @@
 import { prisma } from "../../lib/prisma";
 import { BookingStatus } from "../../../generated/prisma/enums";
+import { ICreateReviewPayload } from "./review.interface";
 
 const createReview = async (
   studentId: string,
-  payload: { bookingId: string; rating: number; comment: string },
+  payload: ICreateReviewPayload,
 ) => {
   // Check if the booking exists and belongs to this student
   const booking = await prisma.booking.findUnique({
@@ -36,7 +37,7 @@ const createReview = async (
       data: {
         bookingId: payload.bookingId,
         rating: payload.rating,
-        comment: payload.comment,
+        comment: payload.comment ? payload.comment : null,
       },
     });
 

@@ -8,7 +8,13 @@ const createTutorZod = z.object({
 
     bio: z.string().optional(),
 
-    image: z.string().regex(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i, "Invalid image URL format").optional(),
+    image: z
+      .string()
+      .regex(
+        /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i,
+        "Invalid image URL format",
+      )
+      .optional(),
 
     hourlyRate: z
       .number({ message: "Hourly rate must be a number" })
@@ -18,10 +24,24 @@ const createTutorZod = z.object({
 
 const updateTutorZod = z.object({
   body: z.object({
-    categoryIds: z.array(z.string()).min(1).optional(),
+    addCategoryIds: z
+      .array(z.string({ message: "Category IDs are required" }))
+      .optional(),
+    removeCategoryIds: z
+      .array(z.string({ message: "Category IDs are required" }))
+      .optional(),
     bio: z.string().optional(),
-    image: z.string().regex(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i, "Invalid image URL format").optional(),
-    hourlyRate: z.number().positive().optional(),
+    image: z
+      .string()
+      .regex(
+        /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i,
+        "Invalid image URL format",
+      )
+      .optional(),
+    hourlyRate: z
+      .number({ message: "Hourly rate must be a number" })
+      .positive("Rate must be a positive number")
+      .optional(),
   }),
 });
 

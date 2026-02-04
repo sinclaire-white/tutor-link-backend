@@ -9,3 +9,11 @@ export interface ITutorRegistration {
   image?: string;
   hourlyRate: number;
 }
+
+export interface ITutorUpdatePayload {
+  addCategoryIds?: string[];    // New categories to add
+  removeCategoryIds?: string[]; // Existing categories to remove
+  bio?: string;
+  image?: string;
+  hourlyRate?: number;
+}

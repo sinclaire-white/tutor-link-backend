@@ -1,19 +1,14 @@
 import { Request, Response } from "express";
 import { ReviewService } from "./review.service";
 import sendResponse from "../../utils/sendResponse";
+import { ICreateReviewPayload, IReviewParams } from "./review.interface";
+import catchAsync from "../../utils/catchAsync";
 
-const createReview = async (req: Request, res: Response) => {
-  // Safe User Check
-  if (!req.user) {
-    return sendResponse(res, {
-      statusCode: 401,
-      success: false,
-      message: "Unauthorized",
-      data: null,
-    });
-  }
-
-  const result = await ReviewService.createReview(req.user.id, req.body);
+const createReview = catchAsync(async (req: Request, res: Response) => {
+  const result = await ReviewService.createReview(
+    req.user.id, 
+    req.body as ICreateReviewPayload
+  );
 
   sendResponse(res, {
     statusCode: 201,
@@ -21,10 +16,11 @@ const createReview = async (req: Request, res: Response) => {
     message: "Review submitted successfully",
     data: result,
   });
-};
+});
 
-const getTutorReviews = async (req: Request, res: Response) => {
+const getTutorReviews = catchAsync(async (req: Request<IReviewParams>, res: Response) => {
   const { tutorId } = req.params;
+  
   const result = await ReviewService.getTutorReviews(tutorId as string);
 
   sendResponse(res, {
@@ -33,6 +29,6 @@ const getTutorReviews = async (req: Request, res: Response) => {
     message: "Reviews fetched successfully",
     data: result,
   });
-};
+});
 
 export const ReviewController = { createReview, getTutorReviews };

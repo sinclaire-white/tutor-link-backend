@@ -2,7 +2,7 @@ import { BookingStatus } from "../../../generated/prisma/enums";
 import AppError from "../../errors/AppError";
 import { prisma } from "../../lib/prisma";
 import { UserRole } from "../../middlewares/auth.middleware";
-import { ITutorRegistration } from "./tutor.interface";
+import { ITutorRegistration, ITutorUpdatePayload } from "./tutor.interface";
 
 /**
  * Internal helper to find a tutor profile or throw a 404.
@@ -35,6 +35,9 @@ const registerTutor = async (userId: string, payload: ITutorRegistration) => {
   const { categoryIds, ...tutorData } = payload;
 
   return await prisma.$transaction(async (tx) => {
+    const existingTutor = await tx.tutor.findUnique({ where: { userId } });
+    if (existingTutor)
+      throw new AppError(400, "User is already registered as a tutor");
     // Update User Role to TUTOR
     await tx.user.update({
       where: { id: userId },
@@ -72,19 +75,25 @@ const getAllTutors = async () => {
 };
 
 // Update Tutor Profile and its category links (Used by Tutor or Admin)
-const updateTutor = async (id: string, payload: Partial<ITutorRegistration>) => {
+const updateTutor = async (id: string, payload: ITutorUpdatePayload) => {
   await findTutorOrThrow(id); // Ensure tutor exists
-  const { categoryIds, ...updateData } = payload;
+
+  const { addCategoryIds, removeCategoryIds, ...updateData } = payload;
 
   return await prisma.tutor.update({
     where: { id },
     data: {
       ...updateData,
-      ...(categoryIds && {
-        categories: {
-          set: categoryIds.map((cid: string) => ({ id: cid })), // Updates relation links
-        },
-      }),
+      categories: {
+        // connect adds new relations without touching existing ones
+        ...(addCategoryIds && {
+          connect: addCategoryIds.map((cid) => ({ id: cid })),
+        }),
+        // disconnect removes specific relations
+        ...(removeCategoryIds && {
+          disconnect: removeCategoryIds.map((cid) => ({ id: cid })),
+        }),
+      },
     },
   });
 };

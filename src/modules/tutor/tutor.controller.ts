@@ -4,7 +4,7 @@ import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 import { UserRole } from "../../middlewares/auth.middleware";
 import AppError from "../../errors/AppError";
-import { ITutorParams, ITutorRegistration } from "./tutor.interface";
+import { ITutorParams, ITutorRegistration, ITutorUpdatePayload } from "./tutor.interface";
 
 /**
  * Validates that the tutor ID is present.
@@ -76,7 +76,7 @@ const updateTutor = catchAsync(
       throw new AppError(403, "You are not authorized to update this profile");
     }
 
-    const result = await TutorService.updateTutor(id, req.body as Partial<ITutorRegistration>);
+    const result = await TutorService.updateTutor(id, req.body as ITutorUpdatePayload);
     sendResponse(res, {
       statusCode: 200,
       success: true,

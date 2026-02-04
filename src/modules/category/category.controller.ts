@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { CategoryService } from "./category.service";
 import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
+import { IUpdateCategoryPayload } from "./category.interface";
 
 // for creating a category wrapped in catchAsync to handle errors globally
 const createCategory = catchAsync(async (req: Request, res: Response) => {
@@ -30,7 +31,11 @@ const getAllCategories = catchAsync(async (req: Request, res: Response) => {
 // for updating a category
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await CategoryService.updateCategory(id as string, req.body);
+  const result = await CategoryService.updateCategory(
+    id as string,
+    req.body as IUpdateCategoryPayload
+  );
+
 
   sendResponse(res, {
     statusCode: 200,

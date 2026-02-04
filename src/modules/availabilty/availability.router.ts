@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { AvailabilityController } from "./availability.controller";
 import authMiddleware, { UserRole } from "../../middlewares/auth.middleware";
+import validateRequest from "../../middlewares/validateStatus";
+import { AvailabilityValidation } from "./availability.validation";
 
 const router: Router = Router();
 
@@ -11,6 +13,7 @@ router.get("/:tutorId", AvailabilityController.getTutorAvailability);
 router.put(
   "/my-slots",
   authMiddleware(UserRole.TUTOR), // Security Guard
+  validateRequest(AvailabilityValidation.updateAvailabilityZod),
   AvailabilityController.updateMyAvailability
 );
 

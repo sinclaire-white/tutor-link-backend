@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import sendResponse from "../../utils/sendResponse";
+import catchAsync from "../../utils/catchAsync";
+import { IUpdateUserProfilePayload } from "./user.interface";
 
-const getMyProfile = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return sendResponse(res, { statusCode: 401, success: false, message: "Unauthorized", data: null });
-  }
-
+// get current user's profile
+const getMyProfile = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.getMyProfile(req.user.id);
 
   sendResponse(res, {
@@ -15,14 +14,14 @@ const getMyProfile = async (req: Request, res: Response) => {
     message: "Profile fetched successfully",
     data: result,
   });
-};
+});
 
-const updateMyProfile = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return sendResponse(res, { statusCode: 401, success: false, message: "Unauthorized", data: null });
-  }
-
-  const result = await UserService.updateMyProfile(req.user.id, req.body);
+// update current user's profile
+const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.updateMyProfile(
+    req.user.id,
+    req.body as IUpdateUserProfilePayload,
+  );
 
   sendResponse(res, {
     statusCode: 200,
@@ -30,6 +29,9 @@ const updateMyProfile = async (req: Request, res: Response) => {
     message: "Profile updated successfully",
     data: result,
   });
-};
+});
 
-export const UserController = { getMyProfile, updateMyProfile };
+export const UserController = {
+  getMyProfile,
+  updateMyProfile,
+};

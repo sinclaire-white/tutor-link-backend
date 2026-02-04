@@ -2,54 +2,44 @@ import { Request, Response } from "express";
 import { AvailabilityService } from "./availability.service";
 import sendResponse from "../../utils/sendResponse";
 import { prisma } from "../../lib/prisma";
+import catchAsync from "../../utils/catchAsync";
+import AppError from "../../errors/AppError";
+import { IAvailabilityParams, IUpdateAvailabilityPayload } from "./availability.interface";
 
-const updateMyAvailability = async (req: Request, res: Response) => {
-  if (!req.user) {
-    return sendResponse(res, {
-      statusCode: 401,
-      success: false,
-      message: "You must be logged in to update availability.",
-      data: null,
-    });
-  }
-  const userId = req.user.id
-
-  // Map the User to their Tutor profile 
+const updateMyAvailability = catchAsync(async (req: Request, res: Response) => {
+  // Map User to Tutor profile
   const tutorProfile = await prisma.tutor.findUnique({
-    where: { userId },
+    where: { userId: req.user.id },
   });
 
   if (!tutorProfile) {
-    return sendResponse(res, {
-      statusCode: 404,
-      success: false,
-      message: "Tutor profile not found.",
-      data: null,
-    });
+    throw new AppError(404, "Tutor profile not found");
   }
-
-  const result = await AvailabilityService.updateAvailability(tutorProfile.id, req.body.slots);
+const result = await AvailabilityService.updateAvailability(
+    tutorProfile.id, 
+    (req.body as IUpdateAvailabilityPayload).slots
+  );
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Weekly availability updated successfully.",
+    message: "Weekly availability updated successfully",
     data: result,
   });
-};
+});
 
-const getTutorAvailability = async (req: Request, res: Response) => {
-    // For students viewing a specific tutor's availability
-  const { tutorId } = req.params;  
+const getTutorAvailability = catchAsync(async (req: Request<IAvailabilityParams>, res: Response) => {
+  const { tutorId } = req.params;
+  
   const result = await AvailabilityService.getTutorAvailability(tutorId as string);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "Availability slots retrieved successfully.",
+    message: "Availability slots retrieved successfully",
     data: result,
   });
-};
+});
 
 export const AvailabilityController = {
   updateMyAvailability,
