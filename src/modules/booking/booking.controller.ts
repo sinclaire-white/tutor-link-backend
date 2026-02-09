@@ -45,6 +45,20 @@ const getMyBookings = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// Admin: fetch all bookings with related user info
+const getAllBookings = catchAsync(async (req: Request, res: Response) => {
+  const { page, perPage, q } = req.query as { page?: string; perPage?: string; q?: string };
+  const p = page ? parseInt(page, 10) : 1;
+  const pp = perPage ? parseInt(perPage, 10) : 10;
+  const result = await BookingService.getAllBookings({ page: p, perPage: pp, q });
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "All bookings fetched successfully",
+    data: result,
+  });
+});
+
 // updating the status of a booking
 const updateStatus = catchAsync(
   async (req: Request<IBookingParams>, res: Response) => {
@@ -66,3 +80,5 @@ export const BookingController = {
   createBooking, 
   getMyBookings, 
   updateStatus };
+// include admin getter
+Object.assign(BookingController, { getAllBookings });

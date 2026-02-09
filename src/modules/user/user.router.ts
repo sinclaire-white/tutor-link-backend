@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "./user.controller";
-import authMiddleware from "../../middlewares/auth.middleware";
+import authMiddleware, { UserRole } from "../../middlewares/auth.middleware";
 import validateRequest from "../../middlewares/validateStatus";
 import { UserValidation } from "./user.vaidation";
 
@@ -18,5 +18,11 @@ router.patch("/me",
      validateRequest(UserValidation.updateUserProfileZod),
     UserController.updateMyProfile
 );
+
+// Admin: list users
+router.get("/", authMiddleware(UserRole.ADMIN), UserController.listUsers);
+
+// Admin: suspend/unsuspend a user
+router.patch("/:id/suspend", authMiddleware(UserRole.ADMIN), UserController.suspendUser);
 
 export const UserRoutes = router;

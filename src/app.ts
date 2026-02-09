@@ -3,12 +3,29 @@ import cors from 'cors';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import notFound from './middlewares/notFound';
 import router from './routes/index';
+import { auth } from './lib/auth';
+import { toNodeHandler } from 'better-auth/node';
 
 const app: Application = express();
 
-// Parsers
+// allowed origins properly
+const allowedOrigins = process.env.NODE_ENV === "development" 
+  ? ["http://localhost:3000"]
+  : [process.env.APP_URL || "http://localhost:5000"].filter(Boolean); 
+
+
+// cors configuration
+
+app.use(cors({
+  origin: allowedOrigins as string[],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
+// Better Auth handles all /api/auth/* routes automatically
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json());
-app.use(cors());
 
 // Application Routes
 app.use('/api/v1', router);

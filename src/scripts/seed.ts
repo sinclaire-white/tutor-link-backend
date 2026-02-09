@@ -18,8 +18,7 @@ async function seedAdmin() {
     body: {
       email: adminMail,
       password: process.env.ADMIN_PASSWORD as string,
-      name: "TutorLink Admin",
-      role: "ADMIN", 
+      name: "TutorLink Admin", 
     },
   });
 
@@ -28,9 +27,20 @@ async function seedAdmin() {
     where: { email: adminMail },
     data: { emailVerified: true },
   });
+ // Update the role directly via Prisma
+  await prisma.user.update({
+    where: { email: adminMail },
+    data: { 
+      emailVerified: true,
+      role: "ADMIN", // role set it via Prisma
+    },
+  });
 
-
+  console.log("Admin created and verified successfully");
 }
+
+
+
 
 seedAdmin()
   .catch((e) => {

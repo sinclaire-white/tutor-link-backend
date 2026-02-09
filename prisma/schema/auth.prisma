@@ -18,6 +18,7 @@ model User {
     image         String?
     phoneNumber   String?
     age           Int?      @db.SmallInt
+    isSuspended   Boolean   @default(false)
     role          UserRole  @default(STUDENT)
     createdAt     DateTime  @default(now())
     updatedAt     DateTime  @updatedAt

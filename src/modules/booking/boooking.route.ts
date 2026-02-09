@@ -29,4 +29,7 @@ router.patch(
   BookingController.updateStatus
 );
 
+// Admin: get all bookings
+router.get("/", authMiddleware(UserRole.ADMIN), BookingController.getAllBookings);
+
 export const BookingRoutes = router;

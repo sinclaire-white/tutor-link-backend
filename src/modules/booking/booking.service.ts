@@ -127,4 +127,33 @@ export const BookingService = {
   createBooking,
   getMyBookings,
   updateBookingStatus,
+  // Admin: fetch all bookings with student and tutor info
+  getAllBookings: async (opts?: { page?: number; perPage?: number; q?: string }) => {
+    const page = opts?.page && opts.page > 0 ? opts.page : 1;
+    const perPage = opts?.perPage && opts.perPage > 0 ? opts.perPage : 10;
+    const where: any = {};
+    if (opts?.q) {
+      where.OR = [
+        { student: { name: { contains: opts.q, mode: "insensitive" } } },
+        { tutor: { name: { contains: opts.q, mode: "insensitive" } } },
+      ];
+    }
+
+    const [items, total] = await prisma.$transaction([
+      prisma.booking.findMany({
+        where,
+        include: {
+          student: { select: { id: true, name: true, email: true } },
+          tutor: { select: { id: true, name: true, email: true } },
+          category: { select: { name: true } },
+        },
+        orderBy: { scheduledAt: "asc" },
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+      prisma.booking.count({ where }),
+    ]);
+
+    return { items, total, page, perPage };
+  },
 };

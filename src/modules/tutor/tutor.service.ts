@@ -59,19 +59,27 @@ const registerTutor = async (userId: string, payload: ITutorRegistration) => {
 };
 
 // Fetches all tutors along with their associated user and category details
-const getAllTutors = async () => {
-  return await prisma.tutor.findMany({
-    include: {
-      user: {
-        select: {
-          name: true,
-          email: true,
-          image: true,
-        },
+const getAllTutors = async (opts?: { page?: number; perPage?: number; approved?: boolean }) => {
+  const page = opts?.page && opts.page > 0 ? opts.page : 1;
+  const perPage = opts?.perPage && opts.perPage > 0 ? opts.perPage : 10;
+  const where: any = {};
+  if (typeof opts?.approved === 'boolean') where.isApproved = opts.approved;
+
+  const [items, total] = await prisma.$transaction([
+    prisma.tutor.findMany({
+      where,
+      include: {
+        user: { select: { name: true, email: true, image: true } },
+        categories: true,
       },
-      categories: true,
-    },
-  });
+      skip: (page - 1) * perPage,
+      take: perPage,
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.tutor.count({ where }),
+  ]);
+
+  return { items, total, page, perPage };
 };
 
 // Update Tutor Profile and its category links (Used by Tutor or Admin)
@@ -135,10 +143,16 @@ const deleteTutor = async (id: string) => {
   });
 };
 
+const setTutorApproval = async (id: string, approved: boolean) => {
+  await findTutorOrThrow(id);
+  return await prisma.tutor.update({ where: { id }, data: { isApproved: approved } });
+};
+
 export const TutorService = {
   registerTutor,
   getAllTutors,
   getSingleTutor: findTutorOrThrow,
   updateTutor,
   deleteTutor,
+  setTutorApproval,
 };

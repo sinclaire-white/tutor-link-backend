@@ -34,4 +34,7 @@ router.delete(
   TutorController.deleteTutor,
 );
 
+// Admin: approve or reject tutor profile
+router.patch("/:id/approve", authMiddleware(UserRole.ADMIN), TutorController.setApproval);
+
 export const TutorRoutes = router;

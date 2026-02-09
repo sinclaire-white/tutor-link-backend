@@ -33,6 +33,10 @@ const moduleRoutes = [
     path: "/categories",
     route: CategoryRoutes,
   },
+  {
+    path: "/admin",
+    route: require("../modules/admin/admin.router").AdminRoutes,
+  },
 ];
 
 // This loop registers all the routes automatically

@@ -37,7 +37,11 @@ const registerTutor = catchAsync(async (req: Request, res: Response) => {
 
 // Fetches all tutors
 const getAllTutors = catchAsync(async (req: Request, res: Response) => {
-  const result = await TutorService.getAllTutors();
+  const { page, perPage, approved } = req.query as { page?: string; perPage?: string; approved?: string };
+  const p = page ? parseInt(page, 10) : 1;
+  const pp = perPage ? parseInt(perPage, 10) : 10;
+  const ap = typeof approved !== 'undefined' ? approved === 'true' : undefined;
+  const result = await TutorService.getAllTutors({ page: p, perPage: pp, approved: ap });
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -116,3 +120,17 @@ export const TutorController = {
   updateTutor,
   deleteTutor,
 };
+
+const setApproval = catchAsync(async (req: Request, res: Response) => {
+  const id = validateId(req.params.id);
+  const { approved } = req.body as { approved: boolean };
+  const result = await (require("./tutor.service").TutorService.setTutorApproval(id, !!approved));
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Tutor approval status updated",
+    data: result,
+  });
+});
+
+Object.assign(TutorController, { setApproval });
