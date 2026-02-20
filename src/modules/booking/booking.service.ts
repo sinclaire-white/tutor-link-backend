@@ -2,6 +2,7 @@ import { prisma } from "../../lib/prisma";
 import { BookingStatus, Day } from "../../../generated/prisma/enums";
 import AppError from "../../errors/AppError";
 import { ICreateBookingPayload } from "./booking.interface";
+import { UserRole } from "../../middlewares/auth.middleware";
 
 // helper to find a booking or throw 404 error
 const findBookingOrThrow = async (id: string) => {
@@ -177,8 +178,46 @@ const getMyBookings = async (userId: string, role: string) => {
 const updateBookingStatus = async (
   bookingId: string,
   status: BookingStatus,
+  requesterId: string,
+  requesterRole: UserRole,
 ) => {
-  await findBookingOrThrow(bookingId); // Ensure booking exists
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: {
+      student: { select: { id: true } },
+      tutor: { select: { id: true } },
+    },
+  });
+  if (!booking) throw new AppError(404, 'Booking not found');
+
+  if (requesterRole === UserRole.STUDENT) {
+    // Student can only cancel their own PENDING or CONFIRMED bookings
+    if (booking.student.id !== requesterId) {
+      throw new AppError(403, 'You can only manage your own bookings');
+    }
+    if (status !== BookingStatus.CANCELLED) {
+      throw new AppError(403, 'Students can only cancel bookings');
+    }
+    if (!['PENDING', 'CONFIRMED'].includes(booking.status)) {
+      throw new AppError(400, 'Only pending or confirmed bookings can be cancelled');
+    }
+  } else if (requesterRole === UserRole.TUTOR) {
+    // Tutor can only manage bookings where they are the tutor
+    if (booking.tutor.id !== requesterId) {
+      throw new AppError(403, 'You can only manage your own bookings');
+    }
+    const allowedTutorTransitions: Record<string, BookingStatus[]> = {
+      PENDING: [BookingStatus.CONFIRMED, BookingStatus.CANCELLED],
+      CONFIRMED: [BookingStatus.ONGOING, BookingStatus.CANCELLED],
+      ONGOING: [BookingStatus.COMPLETED],
+    };
+    const allowed = allowedTutorTransitions[booking.status] || [];
+    if (!allowed.includes(status)) {
+      throw new AppError(400, `Cannot transition booking from ${booking.status} to ${status}`);
+    }
+  }
+  // ADMIN can set any status freely
+
   return await prisma.booking.update({
     where: { id: bookingId },
     data: { status },

@@ -21,11 +21,11 @@ router.get(
   BookingController.getMyBookings
 );
 
-// Update Status: Only Tutors or Admins can change a booking status.
+// Update Status: Any authenticated user — role-based rules enforced in the service.
 router.patch(
   "/:id/status",
-  authMiddleware(UserRole.TUTOR, UserRole.ADMIN),
-  validateRequest(BookingValidation.updateBookingStatusZod), 
+  authMiddleware(),
+  validateRequest(BookingValidation.updateBookingStatusZod),
   BookingController.updateStatus
 );
 

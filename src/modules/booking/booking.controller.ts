@@ -64,8 +64,10 @@ const updateStatus = catchAsync(
   async (req: Request<IBookingParams>, res: Response) => {
     const id = validateId(req.params.id);
     const { status } = req.body;
+    const requesterId = req.user!.id;
+    const requesterRole = req.user!.role;
 
-    const result = await BookingService.updateBookingStatus(id, status);
+    const result = await BookingService.updateBookingStatus(id, status, requesterId, requesterRole);
 
     sendResponse(res, {
       statusCode: 200,
