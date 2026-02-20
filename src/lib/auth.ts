@@ -8,9 +8,9 @@ export const auth = betterAuth({
   }),
 
   cors: {
-    origin: process.env.NODE_ENV === "development" 
-      ? ["http://localhost:3000"]  
-      : [process.env.NEXT_PUBLIC_APP_URL!],
+    origin: process.env.NODE_ENV === "development"
+      ? ["http://localhost:3000"]
+      : [process.env.APP_URL || "http://localhost:3000"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -37,7 +37,7 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:5000",
   
   trustedOrigins: [
-    process.env.APP_URL || "http://localhost:5000",
+    process.env.APP_URL || "http://localhost:3000",
     "http://localhost:3000",
   ],
 
