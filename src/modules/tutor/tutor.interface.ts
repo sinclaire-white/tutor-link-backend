@@ -8,12 +8,19 @@ export interface ITutorRegistration {
   bio?: string;
   image?: string;
   hourlyRate: number;
+   availabilities?: {        
+    dayOfWeek: string;
+    startTime: string;
+    endTime: string;
+  }[];
 }
 
 export interface ITutorUpdatePayload {
-  addCategoryIds?: string[];    // New categories to add
+  addCategoryIds?: string[]; // New categories to add
   removeCategoryIds?: string[]; // Existing categories to remove
   bio?: string;
+  qualifications?: string;
   image?: string;
   hourlyRate?: number;
+  isApproved?: boolean;
 }

@@ -3,6 +3,7 @@ import { fromNodeHeaders } from "better-auth/node";
 import { NextFunction, Request, Response } from "express";
 import AppError from "../errors/AppError";
 import catchAsync from "../utils/catchAsync";
+import { prisma } from "../lib/prisma";
 
 export enum UserRole {
   STUDENT = "STUDENT",
@@ -22,12 +23,26 @@ const authMiddleware = (...roles: UserRole[]) => {
     }
 
     // Check Email Verification
-    if (!session.user.emailVerified) {
-      throw new AppError(403, "Please verify your email.");
+    // if (!session.user.emailVerified) {
+    //   throw new AppError(403, "Please verify your email.");
+    // }
+
+    // Check if user is suspended
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { isSuspended: true, role: true },
+    });
+
+    if (!user) {
+      throw new AppError(401, "User not found");
+    }
+
+    if (user.isSuspended) {
+      throw new AppError(403, "Your account has been suspended. Contact support.");
     }
 
     // Check Roles
-    const userRole = session.user.role as UserRole;
+    const userRole = user.role as UserRole;
 
     if (roles.length && !roles.includes(userRole)) {
       throw new AppError(403, "You do not have permission to access this resource.");

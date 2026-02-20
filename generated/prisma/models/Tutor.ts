@@ -40,9 +40,12 @@ export type TutorMinAggregateOutputType = {
   id: string | null
   userId: string | null
   bio: string | null
+  qualifications: string | null
   image: string | null
   hourlyRate: runtime.Decimal | null
   rating: runtime.Decimal | null
+  isApproved: boolean | null
+  isFeatured: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -51,9 +54,12 @@ export type TutorMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   bio: string | null
+  qualifications: string | null
   image: string | null
   hourlyRate: runtime.Decimal | null
   rating: runtime.Decimal | null
+  isApproved: boolean | null
+  isFeatured: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,9 +68,12 @@ export type TutorCountAggregateOutputType = {
   id: number
   userId: number
   bio: number
+  qualifications: number
   image: number
   hourlyRate: number
   rating: number
+  isApproved: number
+  isFeatured: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -85,9 +94,12 @@ export type TutorMinAggregateInputType = {
   id?: true
   userId?: true
   bio?: true
+  qualifications?: true
   image?: true
   hourlyRate?: true
   rating?: true
+  isApproved?: true
+  isFeatured?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -96,9 +108,12 @@ export type TutorMaxAggregateInputType = {
   id?: true
   userId?: true
   bio?: true
+  qualifications?: true
   image?: true
   hourlyRate?: true
   rating?: true
+  isApproved?: true
+  isFeatured?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -107,9 +122,12 @@ export type TutorCountAggregateInputType = {
   id?: true
   userId?: true
   bio?: true
+  qualifications?: true
   image?: true
   hourlyRate?: true
   rating?: true
+  isApproved?: true
+  isFeatured?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -205,9 +223,12 @@ export type TutorGroupByOutputType = {
   id: string
   userId: string
   bio: string | null
+  qualifications: string | null
   image: string | null
   hourlyRate: runtime.Decimal
   rating: runtime.Decimal | null
+  isApproved: boolean
+  isFeatured: boolean
   createdAt: Date
   updatedAt: Date
   _count: TutorCountAggregateOutputType | null
@@ -239,9 +260,12 @@ export type TutorWhereInput = {
   id?: Prisma.StringFilter<"Tutor"> | string
   userId?: Prisma.StringFilter<"Tutor"> | string
   bio?: Prisma.StringNullableFilter<"Tutor"> | string | null
+  qualifications?: Prisma.StringNullableFilter<"Tutor"> | string | null
   image?: Prisma.StringNullableFilter<"Tutor"> | string | null
   hourlyRate?: Prisma.DecimalFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.DecimalNullableFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFilter<"Tutor"> | boolean
+  isFeatured?: Prisma.BoolFilter<"Tutor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
   categories?: Prisma.CategoryListRelationFilter
@@ -253,9 +277,12 @@ export type TutorOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  qualifications?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  isApproved?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   categories?: Prisma.CategoryOrderByRelationAggregateInput
@@ -270,9 +297,12 @@ export type TutorWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TutorWhereInput[]
   NOT?: Prisma.TutorWhereInput | Prisma.TutorWhereInput[]
   bio?: Prisma.StringNullableFilter<"Tutor"> | string | null
+  qualifications?: Prisma.StringNullableFilter<"Tutor"> | string | null
   image?: Prisma.StringNullableFilter<"Tutor"> | string | null
   hourlyRate?: Prisma.DecimalFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.DecimalNullableFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFilter<"Tutor"> | boolean
+  isFeatured?: Prisma.BoolFilter<"Tutor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
   categories?: Prisma.CategoryListRelationFilter
@@ -284,9 +314,12 @@ export type TutorOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  qualifications?: Prisma.SortOrderInput | Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   rating?: Prisma.SortOrderInput | Prisma.SortOrder
+  isApproved?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TutorCountOrderByAggregateInput
@@ -303,9 +336,12 @@ export type TutorScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Tutor"> | string
   userId?: Prisma.StringWithAggregatesFilter<"Tutor"> | string
   bio?: Prisma.StringNullableWithAggregatesFilter<"Tutor"> | string | null
+  qualifications?: Prisma.StringNullableWithAggregatesFilter<"Tutor"> | string | null
   image?: Prisma.StringNullableWithAggregatesFilter<"Tutor"> | string | null
   hourlyRate?: Prisma.DecimalWithAggregatesFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.DecimalNullableWithAggregatesFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolWithAggregatesFilter<"Tutor"> | boolean
+  isFeatured?: Prisma.BoolWithAggregatesFilter<"Tutor"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tutor"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Tutor"> | Date | string
 }
@@ -313,9 +349,12 @@ export type TutorScalarWhereWithAggregatesInput = {
 export type TutorCreateInput = {
   id?: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryCreateNestedManyWithoutTutorsInput
@@ -327,9 +366,12 @@ export type TutorUncheckedCreateInput = {
   id?: string
   userId: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTutorsInput
@@ -339,9 +381,12 @@ export type TutorUncheckedCreateInput = {
 export type TutorUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUpdateManyWithoutTutorsNestedInput
@@ -353,9 +398,12 @@ export type TutorUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTutorsNestedInput
@@ -366,9 +414,12 @@ export type TutorCreateManyInput = {
   id?: string
   userId: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -376,9 +427,12 @@ export type TutorCreateManyInput = {
 export type TutorUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -387,9 +441,12 @@ export type TutorUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -418,9 +475,12 @@ export type TutorCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  qualifications?: Prisma.SortOrder
   image?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isApproved?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -434,9 +494,12 @@ export type TutorMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  qualifications?: Prisma.SortOrder
   image?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isApproved?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -445,9 +508,12 @@ export type TutorMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  qualifications?: Prisma.SortOrder
   image?: Prisma.SortOrder
   hourlyRate?: Prisma.SortOrder
   rating?: Prisma.SortOrder
+  isApproved?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -541,14 +607,6 @@ export type TutorUncheckedUpdateManyWithoutCategoriesNestedInput = {
   deleteMany?: Prisma.TutorScalarWhereInput | Prisma.TutorScalarWhereInput[]
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type NullableDecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -560,9 +618,12 @@ export type NullableDecimalFieldUpdateOperationsInput = {
 export type TutorCreateWithoutUserInput = {
   id?: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryCreateNestedManyWithoutTutorsInput
@@ -572,9 +633,12 @@ export type TutorCreateWithoutUserInput = {
 export type TutorUncheckedCreateWithoutUserInput = {
   id?: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTutorsInput
@@ -600,9 +664,12 @@ export type TutorUpdateToOneWithWhereWithoutUserInput = {
 export type TutorUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUpdateManyWithoutTutorsNestedInput
@@ -612,9 +679,12 @@ export type TutorUpdateWithoutUserInput = {
 export type TutorUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTutorsNestedInput
@@ -624,9 +694,12 @@ export type TutorUncheckedUpdateWithoutUserInput = {
 export type TutorCreateWithoutAvailabilitiesInput = {
   id?: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryCreateNestedManyWithoutTutorsInput
@@ -637,9 +710,12 @@ export type TutorUncheckedCreateWithoutAvailabilitiesInput = {
   id?: string
   userId: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTutorsInput
@@ -664,9 +740,12 @@ export type TutorUpdateToOneWithWhereWithoutAvailabilitiesInput = {
 export type TutorUpdateWithoutAvailabilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUpdateManyWithoutTutorsNestedInput
@@ -677,9 +756,12 @@ export type TutorUncheckedUpdateWithoutAvailabilitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTutorsNestedInput
@@ -688,9 +770,12 @@ export type TutorUncheckedUpdateWithoutAvailabilitiesInput = {
 export type TutorCreateWithoutCategoriesInput = {
   id?: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   availabilities?: Prisma.AvailabilityCreateNestedManyWithoutTutorInput
@@ -701,9 +786,12 @@ export type TutorUncheckedCreateWithoutCategoriesInput = {
   id?: string
   userId: string
   bio?: string | null
+  qualifications?: string | null
   image?: string | null
   hourlyRate: runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   availabilities?: Prisma.AvailabilityUncheckedCreateNestedManyWithoutTutorInput
@@ -737,9 +825,12 @@ export type TutorScalarWhereInput = {
   id?: Prisma.StringFilter<"Tutor"> | string
   userId?: Prisma.StringFilter<"Tutor"> | string
   bio?: Prisma.StringNullableFilter<"Tutor"> | string | null
+  qualifications?: Prisma.StringNullableFilter<"Tutor"> | string | null
   image?: Prisma.StringNullableFilter<"Tutor"> | string | null
   hourlyRate?: Prisma.DecimalFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.DecimalNullableFilter<"Tutor"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFilter<"Tutor"> | boolean
+  isFeatured?: Prisma.BoolFilter<"Tutor"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tutor"> | Date | string
 }
@@ -747,9 +838,12 @@ export type TutorScalarWhereInput = {
 export type TutorUpdateWithoutCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   availabilities?: Prisma.AvailabilityUpdateManyWithoutTutorNestedInput
@@ -760,9 +854,12 @@ export type TutorUncheckedUpdateWithoutCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   availabilities?: Prisma.AvailabilityUncheckedUpdateManyWithoutTutorNestedInput
@@ -772,9 +869,12 @@ export type TutorUncheckedUpdateManyWithoutCategoriesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qualifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   hourlyRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   rating?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  isApproved?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -823,9 +923,12 @@ export type TutorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   userId?: boolean
   bio?: boolean
+  qualifications?: boolean
   image?: boolean
   hourlyRate?: boolean
   rating?: boolean
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   categories?: boolean | Prisma.Tutor$categoriesArgs<ExtArgs>
@@ -838,9 +941,12 @@ export type TutorSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   userId?: boolean
   bio?: boolean
+  qualifications?: boolean
   image?: boolean
   hourlyRate?: boolean
   rating?: boolean
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -850,9 +956,12 @@ export type TutorSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   userId?: boolean
   bio?: boolean
+  qualifications?: boolean
   image?: boolean
   hourlyRate?: boolean
   rating?: boolean
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -862,14 +971,17 @@ export type TutorSelectScalar = {
   id?: boolean
   userId?: boolean
   bio?: boolean
+  qualifications?: boolean
   image?: boolean
   hourlyRate?: boolean
   rating?: boolean
+  isApproved?: boolean
+  isFeatured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TutorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bio" | "image" | "hourlyRate" | "rating" | "createdAt" | "updatedAt", ExtArgs["result"]["tutor"]>
+export type TutorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "bio" | "qualifications" | "image" | "hourlyRate" | "rating" | "isApproved" | "isFeatured" | "createdAt" | "updatedAt", ExtArgs["result"]["tutor"]>
 export type TutorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   categories?: boolean | Prisma.Tutor$categoriesArgs<ExtArgs>
   availabilities?: boolean | Prisma.Tutor$availabilitiesArgs<ExtArgs>
@@ -894,9 +1006,12 @@ export type $TutorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     userId: string
     bio: string | null
+    qualifications: string | null
     image: string | null
     hourlyRate: runtime.Decimal
     rating: runtime.Decimal | null
+    isApproved: boolean
+    isFeatured: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["tutor"]>
@@ -1328,9 +1443,12 @@ export interface TutorFieldRefs {
   readonly id: Prisma.FieldRef<"Tutor", 'String'>
   readonly userId: Prisma.FieldRef<"Tutor", 'String'>
   readonly bio: Prisma.FieldRef<"Tutor", 'String'>
+  readonly qualifications: Prisma.FieldRef<"Tutor", 'String'>
   readonly image: Prisma.FieldRef<"Tutor", 'String'>
   readonly hourlyRate: Prisma.FieldRef<"Tutor", 'Decimal'>
   readonly rating: Prisma.FieldRef<"Tutor", 'Decimal'>
+  readonly isApproved: Prisma.FieldRef<"Tutor", 'Boolean'>
+  readonly isFeatured: Prisma.FieldRef<"Tutor", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Tutor", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Tutor", 'DateTime'>
 }

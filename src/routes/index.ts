@@ -5,6 +5,7 @@ import { ReviewRoutes } from "../modules/review/review.routes";
 import { BookingRoutes } from "../modules/booking/boooking.route";
 import { UserRoutes } from "../modules/user/user.router";
 import { CategoryRoutes } from "../modules/category/category.router";
+import { UploadRoutes } from "../modules/upload/upload.router";
 
 const router: Router = Router();
 
@@ -32,6 +33,10 @@ const moduleRoutes = [
   {
     path: "/categories",
     route: CategoryRoutes,
+  },
+  {
+    path: "/upload",
+    route: UploadRoutes,
   },
   {
     path: "/admin",

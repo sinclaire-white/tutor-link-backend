@@ -8,7 +8,8 @@
     "dev": "tsx watch src/server.ts",
     "build": "prisma generate && tsc",
     "start": "node dist/src/server.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed": "tsx src/scripts/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,13 +17,16 @@
   "packageManager": "pnpm@10.28.1",
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "@prisma/adapter-pg": "^7.3.0",
-    "@prisma/client": "^7.3.0",
+    "@prisma/adapter-pg": "^7.4.1",
+    "@prisma/client": "^7.4.1",
     "better-auth": "^1.4.17",
+    "cloudinary": "^2.9.0",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "http-status": "^2.1.0",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^7.0.13",
     "zod": "latest"
   },
@@ -31,7 +35,7 @@
     "@types/express": "^5.0.6",
     "@types/node": "^25.0.10",
     "@types/nodemailer": "^7.0.9",
-    "prisma": "^7.3.0",
+    "prisma": "^7.4.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

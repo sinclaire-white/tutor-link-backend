@@ -20,8 +20,10 @@ const updateUserProfileZod = z.object({
 
     // Image: Valid URL format if provided
     image: z
-      .url("Invalid image URL format")
-      .optional(),
+      .preprocess(
+        (val) => (val === "" ? undefined : val),
+        z.string().url("Invalid image URL format").optional()
+      ),
 
     // Phone: Any string format, max 20 chars
     phoneNumber: z

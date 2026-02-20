@@ -86,6 +86,7 @@ export const UserScalarFieldEnum = {
   image: 'image',
   phoneNumber: 'phoneNumber',
   age: 'age',
+  isSuspended: 'isSuspended',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -157,6 +158,7 @@ export const BookingScalarFieldEnum = {
   categoryId: 'categoryId',
   status: 'status',
   scheduledAt: 'scheduledAt',
+  duration: 'duration',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -189,9 +191,12 @@ export const TutorScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   bio: 'bio',
+  qualifications: 'qualifications',
   image: 'image',
   hourlyRate: 'hourlyRate',
   rating: 'rating',
+  isApproved: 'isApproved',
+  isFeatured: 'isFeatured',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

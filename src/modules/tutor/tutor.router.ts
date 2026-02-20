@@ -11,7 +11,7 @@ router.get("/", TutorController.getAllTutors);
 
 // Protected: Any logged in user can register to become a tutor
 router.post(
-  "/register",
+  "/apply",
   authMiddleware(),
   validateRequest(TutorValidation.createTutorZod), // Just checks if user is logged in
   TutorController.registerTutor,
@@ -19,6 +19,9 @@ router.post(
 
 // Public: View a single tutor's details
 router.get("/:id", TutorController.getSingleTutor);
+
+// Public: Get approved tutor profile (before /:id to avoid conflict)
+router.get("/public/:id", TutorController.getPublicTutorProfile);
 
 // Protected: Only ADMINs and the TUTOR themselves can update or delete tutor profiles
 router.patch(
@@ -35,6 +38,17 @@ router.delete(
 );
 
 // Admin: approve or reject tutor profile
-router.patch("/:id/approve", authMiddleware(UserRole.ADMIN), TutorController.setApproval);
+router.patch(
+  "/:id/approve",
+  authMiddleware(UserRole.ADMIN),
+  TutorController.setApproval,
+);
+
+// Admin: toggle featured status
+router.patch(
+  "/:id/featured",
+  authMiddleware(UserRole.ADMIN),
+  TutorController.setFeatured,
+);
 
 export const TutorRoutes = router;

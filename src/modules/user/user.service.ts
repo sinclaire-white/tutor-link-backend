@@ -1,12 +1,21 @@
+// user.service.ts
 import { prisma } from "../../lib/prisma";
 import AppError from "../../errors/AppError";
 import { IUpdateUserProfilePayload } from "./user.interface";
+import { paginate, PaginatedResult } from "../../utils/pagination";
 
 const getMyProfile = async (userId: string) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: {
-      tutor: true,
+      tutor: {
+        include: {
+          categories: true,
+          availabilities: {
+            orderBy: { dayOfWeek: "asc" },
+          },
+        },
+      },
       studentBookings: {
         orderBy: { createdAt: "desc" },
         include: {
@@ -31,11 +40,41 @@ const getMyProfile = async (userId: string) => {
   return user;
 };
 
+const getUserById = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
+      phoneNumber: true,
+      age: true,
+      role: true,
+      isSuspended: true,
+      tutor: {
+        select: {
+          bio: true,
+          qualifications: true,
+          hourlyRate: true,
+          isApproved: true,
+          categories: { select: { name: true } },
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  return user;
+};
+
 const updateMyProfile = async (
   userId: string,
   payload: IUpdateUserProfilePayload,
 ) => {
-  // Prevent sensitive field updates through this route
   const updateData: Partial<IUpdateUserProfilePayload> = {};
   if (payload.name) updateData.name = payload.name;
   if (payload.age) updateData.age = payload.age;
@@ -48,30 +87,90 @@ const updateMyProfile = async (
   });
 };
 
-type PagedResult<T> = { items: T[]; total: number; page: number; perPage: number };
+const listUsers = async (opts?: { 
+  search?: string; 
+  page?: number; 
+  perPage?: number;
+  includeSuspended?: boolean;
+}): Promise<PaginatedResult<any>> => {
+  const where: any = {};
+  
+  // Search filter
+  if (opts?.search) {
+    where.OR = [
+      { 
+        name: { 
+          contains: opts.search, 
+          mode: "insensitive" as const 
+        } 
+      }, 
+      { 
+        email: { 
+          contains: opts.search, 
+          mode: "insensitive" as const 
+        } 
+      }
+    ];
+  }
 
-const listUsers = async (opts?: { search?: string; page?: number; perPage?: number }): Promise<PagedResult<any>> => {
-  const page = opts?.page && opts.page > 0 ? opts.page : 1;
-  const perPage = opts?.perPage && opts.perPage > 0 ? opts.perPage : 10;
-  const where = opts?.search
-    ? { OR: [{ name: { contains: opts.search, mode: "insensitive" } }, { email: { contains: opts.search, mode: "insensitive" } }] }
-    : {};
+  // By default, exclude suspended users from list
+  // Admin can pass includeSuspended=true to see all
+  if (!opts?.includeSuspended) {
+    where.isSuspended = false;
+  }
 
-  const [items, total] = await prisma.$transaction([
-    prisma.user.findMany({ where, orderBy: { createdAt: "desc" }, skip: (page - 1) * perPage, take: perPage }),
-    prisma.user.count({ where }),
-  ]);
-
-  return { items, total, page, perPage };
+  return paginate(prisma.user, where, {
+    page: opts?.page,
+    perPage: opts?.perPage,
+    orderBy: { createdAt: "desc" },
+  });
 };
 
-const setUserSuspended = async (userId: string, suspended: boolean) => {
-  return await prisma.user.update({ where: { id: userId }, data: { isSuspended: suspended } });
+// Admin: Suspend user (soft delete)
+const suspendUser = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  if (user.isSuspended) {
+    throw new AppError(400, "User is already suspended");
+  }
+
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { isSuspended: true },
+  });
+};
+
+// Admin: Reactivate suspended user
+const unsuspendUser = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  if (!user.isSuspended) {
+    throw new AppError(400, "User is not suspended");
+  }
+
+  return await prisma.user.update({
+    where: { id: userId },
+    data: { isSuspended: false },
+  });
 };
 
 export const UserService = {
   getMyProfile,
   updateMyProfile,
   listUsers,
-  setUserSuspended,
+  getUserById,
+  suspendUser,
+  unsuspendUser,
 };

@@ -32,4 +32,11 @@ router.patch(
 // Admin: get all bookings
 router.get("/", authMiddleware(UserRole.ADMIN), BookingController.getAllBookings);
 
+// View My Bookings: Both Students and Tutors use this
+router.get(
+  "/my-bookings",
+  authMiddleware(), // Should allow any logged-in user, not just specific roles
+  BookingController.getMyBookings
+);
+
 export const BookingRoutes = router;

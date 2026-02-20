@@ -5,47 +5,34 @@ import { auth } from "../lib/auth";
 const adminMail = process.env.ADMIN_EMAIL as string;
 
 async function seedAdmin() {
-  const existingAdmin = await prisma.user.findUnique({
-    where: { email: adminMail },
-  });
+  // Check if user exists
+  const existingAdmin = await prisma.user.findUnique({ where: { email: adminMail } });
 
-  if (existingAdmin) {
-    console.log("Admin already exists");
-    return;
-  };
+  if (!existingAdmin) {
+    console.log("Creating new admin account..."); // Log creation
+    await auth.api.signUpEmail({
+      body: {
+        email: adminMail,
+        password: process.env.ADMIN_PASSWORD as string,
+        name: "TutorLink Admin", 
+      },
+    });
+  } else {
+    console.log("User found. Syncing permissions..."); // Log found
+  }
 
-  await auth.api.signUpEmail({
-    body: {
-      email: adminMail,
-      password: process.env.ADMIN_PASSWORD as string,
-      name: "TutorLink Admin", 
-    },
-  });
-
-// Verify the email manually
-  await prisma.user.update({
-    where: { email: adminMail },
-    data: { emailVerified: true },
-  });
- // Update the role directly via Prisma
+  // Update logic is now outside the if-block so it always runs
   await prisma.user.update({
     where: { email: adminMail },
     data: { 
-      emailVerified: true,
-      role: "ADMIN", // role set it via Prisma
+      emailVerified: true, // Ensure verified
+      role: "ADMIN", // Force ADMIN role
     },
   });
 
-  console.log("Admin created and verified successfully");
+  console.log("Admin role synced successfully!"); // Final success
 }
 
-
-
-
 seedAdmin()
-  .catch((e) => {
-    // If ANY step above fails, it lands here.
-    console.error("Critical Seed Error:", e.message);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+  .catch((e) => { console.error("Seed Error:", e.message); process.exit(1); }) // Error handling
+  .finally(() => prisma.$disconnect()); // Close connection

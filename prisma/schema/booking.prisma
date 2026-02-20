@@ -5,6 +5,7 @@ model Booking {
     categoryId  String
     status      BookingStatus @default(PENDING)
     scheduledAt DateTime
+    duration    Decimal       @default(1.0) @db.Decimal(4, 2)
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
 

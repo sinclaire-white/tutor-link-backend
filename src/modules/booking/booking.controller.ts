@@ -79,6 +79,7 @@ const updateStatus = catchAsync(
 export const BookingController = { 
   createBooking, 
   getMyBookings, 
-  updateStatus };
-// include admin getter
-Object.assign(BookingController, { getAllBookings });
+  updateStatus,
+  getAllBookings
+ };
+

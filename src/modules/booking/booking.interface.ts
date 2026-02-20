@@ -10,4 +10,5 @@ export interface ICreateBookingPayload {
   tutorId: string;
   categoryId: string;
   scheduledAt: Date;
+  duration?: number;
 }

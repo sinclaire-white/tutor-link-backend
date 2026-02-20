@@ -4,7 +4,11 @@ import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 import { UserRole } from "../../middlewares/auth.middleware";
 import AppError from "../../errors/AppError";
-import { ITutorParams, ITutorRegistration, ITutorUpdatePayload } from "./tutor.interface";
+import {
+  ITutorParams,
+  ITutorRegistration,
+  ITutorUpdatePayload,
+} from "./tutor.interface";
 
 /**
  * Validates that the tutor ID is present.
@@ -37,15 +41,50 @@ const registerTutor = catchAsync(async (req: Request, res: Response) => {
 
 // Fetches all tutors
 const getAllTutors = catchAsync(async (req: Request, res: Response) => {
-  const { page, perPage, approved } = req.query as { page?: string; perPage?: string; approved?: string };
+  const { page, perPage, approved, featured, search, category } = req.query as {
+    page?: string;
+    perPage?: string;
+    approved?: string;
+    featured?: string;
+    search?: string;
+    category?: string;
+  };
   const p = page ? parseInt(page, 10) : 1;
   const pp = perPage ? parseInt(perPage, 10) : 10;
-  const ap = typeof approved !== 'undefined' ? approved === 'true' : undefined;
-  const result = await TutorService.getAllTutors({ page: p, perPage: pp, approved: ap });
+  
+  // Convert approved and featured to boolean or undefined
+  let ap: boolean | undefined = undefined;
+  if(approved === 'true') ap = true;
+  if(approved === 'false') ap = false;
+
+  let ft: boolean | undefined = undefined;
+  if(featured === 'true') ft = true;
+  if(featured === 'false') ft = false;
+
+  const result = await TutorService.getAllTutors({
+    page: p,
+    perPage: pp,
+    approved: ap,
+    featured: ft,
+    search,
+    category
+  });
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: "Tutors fetched successfully",
+    data: result,
+  });
+});
+
+// Get public tutor profile (for students to view)
+const getPublicTutorProfile = catchAsync(async (req: Request<ITutorParams>, res: Response) => {
+  const id = validateId(req.params.id);
+  const result = await TutorService.getPublicTutorProfile(id);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Tutor profile fetched successfully",
     data: result,
   });
 });
@@ -72,7 +111,7 @@ const updateTutor = catchAsync(
     const id = validateId(req.params.id);
     const user = req.user;
 
-    // We call getSingleTutor from service to check ownership
+    // call getSingleTutor from service to check ownership
     const tutorProfile = await TutorService.getSingleTutor(id);
 
     // Authorization: Only Admin or the owner can update
@@ -80,7 +119,10 @@ const updateTutor = catchAsync(
       throw new AppError(403, "You are not authorized to update this profile");
     }
 
-    const result = await TutorService.updateTutor(id, req.body as ITutorUpdatePayload);
+    const result = await TutorService.updateTutor(
+      id,
+      req.body as ITutorUpdatePayload,
+    );
     sendResponse(res, {
       statusCode: 200,
       success: true,
@@ -113,18 +155,11 @@ const deleteTutor = catchAsync(
   },
 );
 
-export const TutorController = {
-  registerTutor,
-  getAllTutors,
-  getSingleTutor,
-  updateTutor,
-  deleteTutor,
-};
-
-const setApproval = catchAsync(async (req: Request, res: Response) => {
-  const id = validateId(req.params.id);
+// Only Admin can approve or reject tutor profiles
+const setApproval = catchAsync(async (req: Request<ITutorParams>, res: Response) => {
+   const id = validateId(req.params.id);
   const { approved } = req.body as { approved: boolean };
-  const result = await (require("./tutor.service").TutorService.setTutorApproval(id, !!approved));
+  const result = await TutorService.setTutorApproval(id, approved);
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -133,4 +168,28 @@ const setApproval = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-Object.assign(TutorController, { setApproval });
+// Only Admin can toggle featured status
+const setFeatured = catchAsync(async (req: Request<ITutorParams>, res: Response) => {
+  const id = validateId(req.params.id);
+  const { featured } = req.body as { featured: boolean };
+  const result = await TutorService.setTutorFeatured(id, featured);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: `Tutor ${featured ? 'added to' : 'removed from'} featured list`,
+    data: result,
+  });
+});
+
+export const TutorController = {
+  registerTutor,
+  getAllTutors,
+  getSingleTutor,
+  updateTutor,
+  deleteTutor,
+  setApproval,
+  setFeatured,
+  getPublicTutorProfile
+};
+
+

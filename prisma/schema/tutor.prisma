@@ -2,12 +2,14 @@ model Tutor {
     id             String         @id @default(uuid())
     userId         String         @unique
     bio            String?        @db.Text
+    qualifications String?        @db.Text
     categories     Category[]
     image          String?
     hourlyRate     Decimal        @db.Decimal(10, 2)
     availabilities Availability[]
     rating         Decimal?       @db.Decimal(2, 1)
     isApproved     Boolean        @default(false)
+    isFeatured     Boolean        @default(false)
     createdAt      DateTime       @default(now())
     updatedAt      DateTime       @updatedAt
 

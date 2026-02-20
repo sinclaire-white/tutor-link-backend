@@ -12,7 +12,7 @@ export const auth = betterAuth({
       ? ["http://localhost:3000"]  
       : [process.env.NEXT_PUBLIC_APP_URL!],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   },
 
@@ -57,7 +57,7 @@ export const auth = betterAuth({
   },
 
   session: {
-    expiresIn: 60 * 60 * 24 * 7,
-    updateAge: 60 * 60 * 24,
+    expiresIn: 60 * 60 * 24 * 30, // 30 days
+    updateAge: 60 * 60 * 24, // Update session every 1 day
   },
 });

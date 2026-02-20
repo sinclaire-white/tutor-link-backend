@@ -42,6 +42,7 @@ export type UserMinAggregateOutputType = {
   image: string | null
   phoneNumber: string | null
   age: number | null
+  isSuspended: boolean | null
   role: $Enums.UserRole | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,6 +56,7 @@ export type UserMaxAggregateOutputType = {
   image: string | null
   phoneNumber: string | null
   age: number | null
+  isSuspended: boolean | null
   role: $Enums.UserRole | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -68,6 +70,7 @@ export type UserCountAggregateOutputType = {
   image: number
   phoneNumber: number
   age: number
+  isSuspended: number
   role: number
   createdAt: number
   updatedAt: number
@@ -91,6 +94,7 @@ export type UserMinAggregateInputType = {
   image?: true
   phoneNumber?: true
   age?: true
+  isSuspended?: true
   role?: true
   createdAt?: true
   updatedAt?: true
@@ -104,6 +108,7 @@ export type UserMaxAggregateInputType = {
   image?: true
   phoneNumber?: true
   age?: true
+  isSuspended?: true
   role?: true
   createdAt?: true
   updatedAt?: true
@@ -117,6 +122,7 @@ export type UserCountAggregateInputType = {
   image?: true
   phoneNumber?: true
   age?: true
+  isSuspended?: true
   role?: true
   createdAt?: true
   updatedAt?: true
@@ -217,6 +223,7 @@ export type UserGroupByOutputType = {
   image: string | null
   phoneNumber: string | null
   age: number | null
+  isSuspended: boolean
   role: $Enums.UserRole
   createdAt: Date
   updatedAt: Date
@@ -253,6 +260,7 @@ export type UserWhereInput = {
   image?: Prisma.StringNullableFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   age?: Prisma.IntNullableFilter<"User"> | number | null
+  isSuspended?: Prisma.BoolFilter<"User"> | boolean
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -271,6 +279,7 @@ export type UserOrderByWithRelationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   age?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSuspended?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -292,6 +301,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   image?: Prisma.StringNullableFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableFilter<"User"> | string | null
   age?: Prisma.IntNullableFilter<"User"> | number | null
+  isSuspended?: Prisma.BoolFilter<"User"> | boolean
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -310,6 +320,7 @@ export type UserOrderByWithAggregationInput = {
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   phoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   age?: Prisma.SortOrderInput | Prisma.SortOrder
+  isSuspended?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -331,6 +342,7 @@ export type UserScalarWhereWithAggregatesInput = {
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phoneNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   age?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null
+  isSuspended?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -344,6 +356,7 @@ export type UserCreateInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -362,6 +375,7 @@ export type UserUncheckedCreateInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -380,6 +394,7 @@ export type UserUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -398,6 +413,7 @@ export type UserUncheckedUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -416,6 +432,7 @@ export type UserCreateManyInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -429,6 +446,7 @@ export type UserUpdateManyMutationInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -442,6 +460,7 @@ export type UserUncheckedUpdateManyInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -455,6 +474,7 @@ export type UserCountOrderByAggregateInput = {
   image?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isSuspended?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -472,6 +492,7 @@ export type UserMaxOrderByAggregateInput = {
   image?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isSuspended?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -485,6 +506,7 @@ export type UserMinOrderByAggregateInput = {
   image?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
   age?: Prisma.SortOrder
+  isSuspended?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -605,6 +627,7 @@ export type UserCreateWithoutSessionsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -622,6 +645,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -655,6 +679,7 @@ export type UserUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -672,6 +697,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -689,6 +715,7 @@ export type UserCreateWithoutAccountsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -706,6 +733,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -739,6 +767,7 @@ export type UserUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -756,6 +785,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -773,6 +803,7 @@ export type UserCreateWithoutStudentBookingsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -790,6 +821,7 @@ export type UserUncheckedCreateWithoutStudentBookingsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -812,6 +844,7 @@ export type UserCreateWithoutTutorBookingsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -829,6 +862,7 @@ export type UserUncheckedCreateWithoutTutorBookingsInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -862,6 +896,7 @@ export type UserUpdateWithoutStudentBookingsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -879,6 +914,7 @@ export type UserUncheckedUpdateWithoutStudentBookingsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -907,6 +943,7 @@ export type UserUpdateWithoutTutorBookingsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -924,6 +961,7 @@ export type UserUncheckedUpdateWithoutTutorBookingsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -941,6 +979,7 @@ export type UserCreateWithoutTutorInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -958,6 +997,7 @@ export type UserUncheckedCreateWithoutTutorInput = {
   image?: string | null
   phoneNumber?: string | null
   age?: number | null
+  isSuspended?: boolean
   role?: $Enums.UserRole
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -991,6 +1031,7 @@ export type UserUpdateWithoutTutorInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1008,6 +1049,7 @@ export type UserUncheckedUpdateWithoutTutorInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   age?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  isSuspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1083,6 +1125,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   image?: boolean
   phoneNumber?: boolean
   age?: boolean
+  isSuspended?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1102,6 +1145,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   phoneNumber?: boolean
   age?: boolean
+  isSuspended?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1115,6 +1159,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   image?: boolean
   phoneNumber?: boolean
   age?: boolean
+  isSuspended?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1128,12 +1173,13 @@ export type UserSelectScalar = {
   image?: boolean
   phoneNumber?: boolean
   age?: boolean
+  isSuspended?: boolean
   role?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phoneNumber" | "age" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "phoneNumber" | "age" | "isSuspended" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -1162,6 +1208,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     image: string | null
     phoneNumber: string | null
     age: number | null
+    isSuspended: boolean
     role: $Enums.UserRole
     createdAt: Date
     updatedAt: Date
@@ -1600,6 +1647,7 @@ export interface UserFieldRefs {
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"User", 'String'>
   readonly age: Prisma.FieldRef<"User", 'Int'>
+  readonly isSuspended: Prisma.FieldRef<"User", 'Boolean'>
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>

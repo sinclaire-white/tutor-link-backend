@@ -33,7 +33,6 @@ const slotSchema = z.object({
 const updateAvailabilityZod = z.object({
   body: z.object({
     slots: z.array(slotSchema)
-      .min(1, "At least one availability slot is required")
       .max(7, "Cannot exceed 7 slots (one per day)"),
   }),
 });
