@@ -11,6 +11,6 @@ export interface ICreateCategoryPayload {
 
 // Data for updating an existing category
 export interface IUpdateCategoryPayload {
-  name?: string;          // Can rename category
-  description?: string;   // Can update or clear description
+  name?: string;                  // Can rename category
+  description?: string | null;    // Can update or clear description (null clears it)
 }
