@@ -155,6 +155,27 @@ const unsuspendUser = async (userId: string) => {
   });
 };
 
+const deleteUser = async (userId: string) => {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new AppError(404, "User not found");
+
+  await prisma.$transaction(async (tx) => {
+    const bookings = await tx.booking.findMany({
+      where: { OR: [{ studentId: userId }, { tutorId: userId }] },
+      select: { id: true },
+    });
+    const bookingIds = bookings.map((b) => b.id);
+
+    if (bookingIds.length > 0) {
+      await tx.review.deleteMany({ where: { bookingId: { in: bookingIds } } });
+      await tx.booking.deleteMany({ where: { id: { in: bookingIds } } });
+    }
+
+    await tx.tutor.deleteMany({ where: { userId } });
+    await tx.user.delete({ where: { id: userId } });
+  });
+};
+
 export const UserService = {
   getMyProfile,
   updateMyProfile,
@@ -162,4 +183,5 @@ export const UserService = {
   getUserById,
   suspendUser,
   unsuspendUser,
+  deleteUser,
 };

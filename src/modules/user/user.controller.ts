@@ -94,6 +94,18 @@ const unsuspendUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = Array.isArray(id) ? id[0] : id;
+  await UserService.deleteUser(userId);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User deleted successfully",
+    data: null,
+  });
+});
+
 export const UserController = {
   getMyProfile,
   updateMyProfile,
@@ -101,4 +113,5 @@ export const UserController = {
   listUsers,
   suspendUser,
   unsuspendUser,
+  deleteUser,
 };

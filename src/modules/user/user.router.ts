@@ -31,4 +31,7 @@ router.patch("/:id/suspend", authMiddleware(UserRole.ADMIN), UserController.susp
 // Admin: unsuspend user  
 router.patch("/:id/unsuspend", authMiddleware(UserRole.ADMIN), UserController.unsuspendUser);
 
+// Admin: delete user
+router.delete("/:id", authMiddleware(UserRole.ADMIN), UserController.deleteUser);
+
 export const UserRoutes = router;
