@@ -74,7 +74,7 @@ const updateStatus = catchAsync(
   },
 );
 
-const deleteBooking = catchAsync(async (req: Request, res: Response) => {
+const deleteBooking = catchAsync(async (req: Request<IBookingParams>, res: Response) => {
   const id = validateId(req.params.id);
   await BookingService.deleteBooking(id);
   sendResponse(res, {
