@@ -220,10 +220,19 @@ const updateBookingStatus = async (
   });
 };
 
+const deleteBooking = async (bookingId: string) => {
+  await findBookingOrThrow(bookingId);
+  await prisma.$transaction(async (tx) => {
+    await tx.review.deleteMany({ where: { bookingId } });
+    await tx.booking.delete({ where: { id: bookingId } });
+  });
+};
+
 export const BookingService = {
   createBooking,
   getMyBookings,
   updateBookingStatus,
+  deleteBooking,
   // Admin: fetch all bookings with student and tutor info
   getAllBookings: async (opts?: {
     page?: number;
