@@ -17,9 +17,12 @@ const createCategory = async (payload: ICreateCategoryPayload) => {
   return await prisma.category.create({ data: payload });
 };
 
-// Returns all categories sorted alphabetically by name
+// Returns all categories sorted by booking popularity (most booked first)
 const getAllCategories = async () => {
-  return await prisma.category.findMany({ orderBy: { name: "asc" } });
+  const categories = await prisma.category.findMany({
+    include: { _count: { select: { bookings: true } } },
+  });
+  return categories.sort((a, b) => b._count.bookings - a._count.bookings);
 };
 
 const updateCategory = async (
