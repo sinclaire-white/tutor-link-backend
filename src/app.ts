@@ -8,13 +8,10 @@ import { toNodeHandler } from 'better-auth/node';
 
 const app: Application = express();
 
-// allowed origins properly
 const allowedOrigins = process.env.NODE_ENV === "development" 
   ? ["http://localhost:3000"]
   : [process.env.APP_URL || "http://localhost:5000"].filter(Boolean); 
 
-
-// cors configuration
 
 app.use(cors({
   origin: allowedOrigins as string[],
@@ -27,7 +24,6 @@ app.use(cors({
 app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json());
 
-// Application Routes
 app.use('/api/v1', router);
 
 // Testing route
@@ -35,8 +31,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Tutor Link Server is running!');
 });
 
-// Middlewares
 app.use(globalErrorHandler); // Must be after routes
-app.use(notFound);           
+app.use(notFound);
 
 export default app;

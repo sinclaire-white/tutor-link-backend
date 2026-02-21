@@ -17,17 +17,10 @@ const authMiddleware = (...roles: UserRole[]) => {
       headers: fromNodeHeaders(req.headers),
     });
 
-    // Check Authentication
     if (!session || !session.user) {
       throw new AppError(401, "You are not an authorized user");
     }
 
-    // Check Email Verification
-    // if (!session.user.emailVerified) {
-    //   throw new AppError(403, "Please verify your email.");
-    // }
-
-    // Check if user is suspended
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { isSuspended: true, role: true },
@@ -41,7 +34,6 @@ const authMiddleware = (...roles: UserRole[]) => {
       throw new AppError(403, "Your account has been suspended. Contact support.");
     }
 
-    // Check Roles
     const userRole = user.role as UserRole;
 
     if (roles.length && !roles.includes(userRole)) {

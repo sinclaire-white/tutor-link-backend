@@ -10,12 +10,6 @@ import {
   ITutorUpdatePayload,
 } from "./tutor.interface";
 
-/**
- * Validates that the tutor ID is present.
- * This function acts as a 'Type Guard'.
- * By throwing an error if ID is missing, TypeScript knows that
- * after this function runs, 'id' is definitely a string.
- */
 const validateId = (id: string | undefined): string => {
   if (!id) {
     throw new AppError(400, "Tutor ID is required");
@@ -23,9 +17,8 @@ const validateId = (id: string | undefined): string => {
   return id;
 };
 
-// Wraps logic in catchAsync to forward errors to the globalErrorHandler
 const registerTutor = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user.id; // user object is attached by authMiddleware
+  const userId = req.user.id; // injected by authMiddleware
   const result = await TutorService.registerTutor(
     userId,
     req.body as ITutorRegistration,
@@ -39,7 +32,6 @@ const registerTutor = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// Fetches all tutors
 const getAllTutors = catchAsync(async (req: Request, res: Response) => {
   const { page, perPage, approved, featured, search, category } = req.query as {
     page?: string;
@@ -52,7 +44,6 @@ const getAllTutors = catchAsync(async (req: Request, res: Response) => {
   const p = page ? parseInt(page, 10) : 1;
   const pp = perPage ? parseInt(perPage, 10) : 10;
   
-  // Convert approved and featured to boolean or undefined
   let ap: boolean | undefined = undefined;
   if(approved === 'true') ap = true;
   if(approved === 'false') ap = false;
@@ -91,7 +82,6 @@ const getPublicTutorProfile = catchAsync(async (req: Request<ITutorParams>, res:
 
 const getSingleTutor = catchAsync(
   async (req: Request<ITutorParams>, res: Response) => {
-    // Use helper to validate and cast ID to string
     const id = validateId(req.params.id);
 
     const result = await TutorService.getSingleTutor(id);
@@ -107,11 +97,9 @@ const getSingleTutor = catchAsync(
 
 const updateTutor = catchAsync(
   async (req: Request<ITutorParams>, res: Response) => {
-    // Use helper to validate and cast ID to string
     const id = validateId(req.params.id);
     const user = req.user;
 
-    // call getSingleTutor from service to check ownership
     const tutorProfile = await TutorService.getSingleTutor(id);
 
     // Authorization: Only Admin or the owner can update
@@ -134,7 +122,6 @@ const updateTutor = catchAsync(
 
 const deleteTutor = catchAsync(
   async (req: Request<ITutorParams>, res: Response) => {
-    // Use helper to validate and cast ID to string
     const id = validateId(req.params.id);
     const user = req.user;
 
@@ -155,7 +142,6 @@ const deleteTutor = catchAsync(
   },
 );
 
-// Only Admin can approve or reject tutor profiles
 const setApproval = catchAsync(async (req: Request<ITutorParams>, res: Response) => {
    const id = validateId(req.params.id);
   const { approved } = req.body as { approved: boolean };
@@ -168,7 +154,6 @@ const setApproval = catchAsync(async (req: Request<ITutorParams>, res: Response)
   });
 });
 
-// Only Admin can toggle featured status
 const setFeatured = catchAsync(async (req: Request<ITutorParams>, res: Response) => {
   const id = validateId(req.params.id);
   const { featured } = req.body as { featured: boolean };

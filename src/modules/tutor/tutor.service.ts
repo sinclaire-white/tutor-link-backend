@@ -20,7 +20,7 @@ const findTutorOrThrow = async (id: string) => {
           image: true,
         },
       },
-      categories: true, // Included because subject string is now a relation
+      categories: true,
     },
   });
 
@@ -72,7 +72,7 @@ const registerTutor = async (userId: string, payload: ITutorRegistration) => {
     return tutor;
   });
 };
-// Fetches all tutors along with their associated user and category details
+
 const getAllTutors = async (opts?: { 
   page?: number; 
   perPage?: number; 
@@ -117,7 +117,6 @@ const getAllTutors = async (opts?: {
       };
   }
 
-  // Remove $transaction, use separate queries
   const items = await prisma.tutor.findMany({
     where,
     include: {
@@ -134,9 +133,7 @@ const getAllTutors = async (opts?: {
   return { items, total, page, perPage };
 };
 
-
-
-// Public profile with reviews and availability
+// Returns a public-facing tutor profile including reviews and availability
 const getPublicTutorProfile = async (id: string) => {
   const tutor = await prisma.tutor.findUnique({
     where: { id, isApproved: true },
@@ -186,13 +183,6 @@ const getPublicTutorProfile = async (id: string) => {
   return { ...tutor, reviews, reviewCount: reviews.length };
 };
 
-
-
-
-
-
-
-// Update Tutor Profile and its category links (Used by Tutor or Admin)
 const updateTutor = async (id: string, payload: ITutorUpdatePayload) => {
   await findTutorOrThrow(id); // Ensure tutor exists
 
@@ -203,11 +193,10 @@ const updateTutor = async (id: string, payload: ITutorUpdatePayload) => {
     data: {
       ...updateData,
       categories: {
-        // connect adds new relations without touching existing ones
+        // connect adds new categories; disconnect removes without touching others
         ...(addCategoryIds && {
           connect: addCategoryIds.map((cid) => ({ id: cid })),
         }),
-        // disconnect removes specific relations
         ...(removeCategoryIds && {
           disconnect: removeCategoryIds.map((cid) => ({ id: cid })),
         }),
@@ -216,8 +205,8 @@ const updateTutor = async (id: string, payload: ITutorUpdatePayload) => {
   });
 };
 
-// This only deletes the Tutor profile, not the User account.
-// Deletes the Tutor profile and reverts user role to STUDENT if no active sessions
+// Deletes the tutor profile and reverts user role to STUDENT.
+// Blocked if there are active (pending/confirmed/ongoing) bookings.
 const deleteTutor = async (id: string) => {
   const tutor = await findTutorOrThrow(id);
 
@@ -243,7 +232,6 @@ const deleteTutor = async (id: string) => {
       );
     }
 
-    // Revert user role back to STUDENT
     await tx.user.update({
       where: { id: tutor.userId },
       data: { role: UserRole.STUDENT },
@@ -257,26 +245,20 @@ const setTutorApproval = async (id: string, approved: boolean) => {
   const tutor = await findTutorOrThrow(id);
   
   return await prisma.$transaction(async (tx) => {
-    // If rejecting, revert the role and delete the tutor profile so it doesn't show in pending
+    // Rejecting: remove the profile so it no longer appears in pending list
     if (!approved) {
       await tx.user.update({
-        where: { id: tutor.userId }, // Use userId from the found tutor object
-        data: { role: UserRole.STUDENT }
+        where: { id: tutor.userId },
+        data: { role: UserRole.STUDENT },
       });
-      
-      // Delete any related data if necessary (e.g. availability cascades automatically usually)
       return await tx.tutor.delete({ where: { id } });
     } else {
-      // If approved, ensure they have the TUTOR role
+      // Approving: ensure TUTOR role is set (may have been reverted by a prior rejection)
       await tx.user.update({
         where: { id: tutor.userId },
-        data: { role: UserRole.TUTOR }
+        data: { role: UserRole.TUTOR },
       });
-
-      return await tx.tutor.update({ 
-        where: { id }, 
-        data: { isApproved: true } 
-      });
+      return await tx.tutor.update({ where: { id }, data: { isApproved: true } });
     }
   });
 };

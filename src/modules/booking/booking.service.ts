@@ -21,12 +21,10 @@ const findBookingOrThrow = async (id: string) => {
 const createBooking = async (payload: ICreateBookingPayload) => {
   const { studentId, tutorId, scheduledAt, duration = 1 } = payload;
 
-  // A user should not be able to hire themselves as a tutor.
   if (studentId === tutorId) {
     throw new AppError(400, "YOU_CANNOT_BOOK_YOURSELF");
   }
 
-  // get the Tutor's Profile ID to check their availability slots.
   const tutorProfile = await prisma.tutor.findUnique({
     where: { userId: tutorId },
   });
@@ -46,7 +44,6 @@ const createBooking = async (payload: ICreateBookingPayload) => {
     throw new AppError(400, "BOOKING_MUST_BE_AT_LEAST_1_HOUR_AHEAD");
   }
 
-  // Calculate booking start and end based on duration
   const bookingStart = new Date(scheduledAt);
   const bookingEnd = new Date(bookingStart.getTime() + duration * 60 * 60 * 1000);
 
@@ -81,6 +78,7 @@ const createBooking = async (payload: ICreateBookingPayload) => {
     Day.FRIDAY,
     Day.SATURDAY,
   ];
+  // scheduledAt is stored as UTC; .getDay() returns the UTC day of the week
   const dayOfBooking = dayNames[scheduledAt.getDay()];
 
   if (!dayOfBooking) {
@@ -116,7 +114,7 @@ const createBooking = async (payload: ICreateBookingPayload) => {
     throw new AppError(400, "BOOKING_TIME_OUTSIDE_AVAILABILITY_SLOT");
   }
 
-  // Check if there is already a PENDING or CONFIRMED booking for this tutor that overlaps
+  // Reject if the tutor already has an overlapping active booking in this window
   const tutorOverlap = await prisma.booking.findFirst({
     where: {
       tutorId: tutorId,
@@ -151,9 +149,7 @@ const createBooking = async (payload: ICreateBookingPayload) => {
   });
 };
 
-//  fetching bookings based on who is asking
 const getMyBookings = async (userId: string, role: string) => {
-  // If TUTOR, filter by tutorId. If STUDENT, filter by studentId.
   const whereCondition =
     role === "TUTOR" ? { tutorId: userId } : { studentId: userId };
 

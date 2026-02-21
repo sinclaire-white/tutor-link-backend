@@ -1,4 +1,3 @@
-// upload/upload.controller.ts
 import { Request, Response } from "express";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
@@ -14,7 +13,6 @@ const getSignature = catchAsync(async (req: Request, res: Response) => {
     throw new Error("Cloudinary credentials not configured");
   }
 
-  // Create signature for upload
   const paramsToSign = `folder=tutorlink/profiles&timestamp=${timestamp}&upload_preset=tutorlink_unsigned${apiSecret}`;
   const signature = crypto
     .createHash("sha256")

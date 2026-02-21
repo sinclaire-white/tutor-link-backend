@@ -44,7 +44,6 @@ const moduleRoutes = [
   },
 ];
 
-// This loop registers all the routes automatically
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 
 export default router;

@@ -13,7 +13,7 @@ router.get("/", TutorController.getAllTutors);
 router.post(
   "/apply",
   authMiddleware(),
-  validateRequest(TutorValidation.createTutorZod), // Just checks if user is logged in
+  validateRequest(TutorValidation.createTutorZod),
   TutorController.registerTutor,
 );
 

@@ -30,14 +30,13 @@ const createReview = async (
     throw new Error("YOU_ALREADY_REVIEWED_THIS_SESSION");
   }
 
-  // reate the Review using a Transaction
-  // This ensures data integrity in case of future expansions
+  // Create the review in a transaction
   return await prisma.$transaction(async (tx) => {
     const review = await tx.review.create({
       data: {
         bookingId: payload.bookingId,
         rating: payload.rating,
-        comment: payload.comment ? payload.comment : null,
+        comment: payload.comment ?? null,
       },
     });
 
@@ -46,7 +45,6 @@ const createReview = async (
 };
 
 const getTutorReviews = async (tutorId: string) => {
-  //  find reviews where the booking's tutorId matches
   return await prisma.review.findMany({
     where: {
       booking: {

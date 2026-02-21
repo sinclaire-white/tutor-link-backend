@@ -1,4 +1,3 @@
-// user.service.ts
 import { prisma } from "../../lib/prisma";
 import AppError from "../../errors/AppError";
 import { IUpdateUserProfilePayload } from "./user.interface";
@@ -76,10 +75,12 @@ const updateMyProfile = async (
   payload: IUpdateUserProfilePayload,
 ) => {
   const updateData: Partial<IUpdateUserProfilePayload> = {};
+  // Use !== undefined so explicit null passes through and clears the field in DB
+  // (name is required in DB so it uses truthy check, never null)
   if (payload.name) updateData.name = payload.name;
-  if (payload.age) updateData.age = payload.age;
-  if (payload.image) updateData.image = payload.image;
-  if (payload.phoneNumber) updateData.phoneNumber = payload.phoneNumber;
+  if (payload.age !== undefined) updateData.age = payload.age;
+  if (payload.image !== undefined) updateData.image = payload.image;
+  if (payload.phoneNumber !== undefined) updateData.phoneNumber = payload.phoneNumber;
 
   return await prisma.user.update({
     where: { id: userId },
@@ -95,26 +96,14 @@ const listUsers = async (opts?: {
 }): Promise<PaginatedResult<any>> => {
   const where: any = {};
   
-  // Search filter
   if (opts?.search) {
     where.OR = [
-      { 
-        name: { 
-          contains: opts.search, 
-          mode: "insensitive" as const 
-        } 
-      }, 
-      { 
-        email: { 
-          contains: opts.search, 
-          mode: "insensitive" as const 
-        } 
-      }
+      { name: { contains: opts.search, mode: "insensitive" as const } },
+      { email: { contains: opts.search, mode: "insensitive" as const } },
     ];
   }
 
-  // By default, exclude suspended users from list
-  // Admin can pass includeSuspended=true to see all
+  // Exclude suspended users by default; pass includeSuspended=true to see all
   if (!opts?.includeSuspended) {
     where.isSuspended = false;
   }

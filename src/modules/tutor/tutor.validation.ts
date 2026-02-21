@@ -41,16 +41,17 @@ const updateTutorZod = z.object({
     removeCategoryIds: z
       .array(z.string({ message: "Category IDs are required" }))
       .optional(),
-    bio: z.string().optional(),
-    qualifications: z.string().optional(),
+    bio: z.string().nullable().optional(),
+    qualifications: z.string().nullable().optional(),
     image: z
       .preprocess(
-        (val) => (val === "" ? undefined : val),
+        (val) => (val === "" ? null : val),
         z.string()
           .regex(
             /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/i,
             "Invalid image URL format",
           )
+          .nullable()
           .optional()
       ),
     hourlyRate: z

@@ -1,4 +1,3 @@
-// user.router.ts
 import { Router } from "express";
 import { UserController } from "./user.controller";
 import authMiddleware, { UserRole } from "../../middlewares/auth.middleware";

@@ -1,4 +1,3 @@
-// user.controller.ts
 import { Request, Response } from "express";
 import { UserService } from "./user.service";
 import sendResponse from "../../utils/sendResponse";

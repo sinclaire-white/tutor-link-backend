@@ -1,4 +1,3 @@
-// upload/upload.router.ts
 import { Router } from "express";
 import { UploadController } from "./upload.controller";
 import authMiddleware from "../../middlewares/auth.middleware";

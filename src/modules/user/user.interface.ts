@@ -1,7 +1,8 @@
+// Payload for PATCH /users/me — all fields are optional; send null to clear a nullable field
 export interface IUpdateUserProfilePayload {
-  name?: string;         // User's display name
-  age?: number;          // Optional age in years
-  image?: string;        // Profile image URL
-  phoneNumber?: string;  // Contact number (no format validation)
+  name?: string;
+  age?: number | null;
+  image?: string | null;
+  phoneNumber?: string | null;
 }
 

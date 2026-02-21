@@ -12,7 +12,7 @@ router.get("/:tutorId", AvailabilityController.getTutorAvailability);
 // Private: Only Tutors can edit their own schedule 
 router.put(
   "/my-slots",
-  authMiddleware(UserRole.TUTOR), // Security Guard
+  authMiddleware(UserRole.TUTOR),
   validateRequest(AvailabilityValidation.updateAvailabilityZod),
   AvailabilityController.updateMyAvailability
 );

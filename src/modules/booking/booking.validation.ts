@@ -3,8 +3,9 @@ import { BookingStatus } from "../../../generated/prisma/enums";
 
 const createBookingZod = z.object({
   body: z.object({
-    tutorId: z.string(), // Changed from uuid to string as User ID might not be UUID
-    categoryId: z.string(), // changed from uuid to string just in cae
+    // User IDs are not guaranteed to be UUIDs depending on the auth provider
+    tutorId: z.string(),
+    categoryId: z.string(),
     scheduledAt: z.string().datetime(),
     duration: z.number().positive().min(0.5).max(12).optional().default(1),
   }),

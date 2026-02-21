@@ -5,10 +5,7 @@ import catchAsync from "../../utils/catchAsync";
 import AppError from "../../errors/AppError";
 import { IBookingParams } from "./booking.interface";
 
-/**
- * Validates that the booking ID is present.
- * This function acts as a 'Type Guard'.
- */
+// Validates that the booking ID param is present and returns it
 const validateId = (id: string | undefined): string => {
   if (!id) {
     throw new AppError(400, "Booking ID is required");
@@ -16,12 +13,11 @@ const validateId = (id: string | undefined): string => {
   return id;
 };
 
-// Wraps logic in catchAsync to forward errors to the globalErrorHandler
 const createBooking = catchAsync(async (req: Request, res: Response) => {
-  // Create booking with studentId from authenticated user
+  // studentId comes from the authenticated session, not the request body
   const result = await BookingService.createBooking({
     ...req.body,
-    studentId: req.user.id, // user object is attached by authMiddleware
+    studentId: req.user.id, // injected by authMiddleware
     scheduledAt: new Date(req.body.scheduledAt),
   });
 

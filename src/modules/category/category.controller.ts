@@ -4,7 +4,6 @@ import sendResponse from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
 import { IUpdateCategoryPayload } from "./category.interface";
 
-// for creating a category wrapped in catchAsync to handle errors globally
 const createCategory = catchAsync(async (req: Request, res: Response) => {
   const result = await CategoryService.createCategory(req.body);
 
@@ -16,7 +15,6 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// for getting the category list
 const getAllCategories = catchAsync(async (req: Request, res: Response) => {
   const result = await CategoryService.getAllCategories();
 
@@ -28,7 +26,6 @@ const getAllCategories = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// for updating a category
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await CategoryService.updateCategory(
@@ -45,7 +42,6 @@ const updateCategory = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// for deleting a category
 const deleteCategory = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   await CategoryService.deleteCategory(id as string);
@@ -54,7 +50,7 @@ const deleteCategory = catchAsync(async (req: Request, res: Response) => {
     statusCode: 200,
     success: true,
     message: "Category deleted successfully",
-    data: null, // no data to return on deletion
+    data: null,
   });
 });
 
